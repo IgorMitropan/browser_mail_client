@@ -1,2 +1,2 @@
-# browser_mail_client
+# Browser mail client
 simple Angular SPA
