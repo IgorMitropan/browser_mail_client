@@ -1,6 +1,8 @@
 'use strict';
 
 import login from './login/login.component.js';
+import commonPage from './commonPage/commonPage.component.js';
+
 import AuthService from './services/AuthService.js';
 
 const app = angular.module('mailApp', ['ui.router']);
@@ -8,7 +10,7 @@ const app = angular.module('mailApp', ['ui.router']);
 app.run(function($transitions) {
     "ngInject";
 
-    $transitions.onStart( { to: 'secret' }, function(AuthService, $state) {
+    $transitions.onStart( { to: 'common' }, function(AuthService, $state) {
         "ngInject";
 
         // If the user is not authenticated
@@ -32,12 +34,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
             url: '/login/',
             template: '<login></login>'
         })
-        .state('secret', {
-            url: '/secret/',
-            template: 'secret'
+        .state('common', {
+            url: '/common/',
+            template: '<common-page></common-page>'
         })
 });
 
 app.component('login', login);
+app.component('commonPage', commonPage);
 
 app.service('AuthService', AuthService);

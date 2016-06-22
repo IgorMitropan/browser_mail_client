@@ -12,7 +12,7 @@ export default {
         this.go = () => {
             AuthService.signIn(this.login, this.password);
 
-            $state.go('secret');
+            $state.go('common');
         }
     }
 }
