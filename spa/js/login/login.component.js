@@ -10,7 +10,7 @@ function controller ($state, AuthService) {
     this.signIn = () => {
         AuthService.signIn(this.login, this.password);
 
-        $state.go('inbox');
+        $state.go('common');
     }
 }
 

@@ -14,7 +14,7 @@ const app = angular.module('mailApp', ['ui.router', 'ui.bootstrap']);
 app.run(function($transitions) {
     "ngInject";
 
-    $transitions.onStart( { to: 'inbox' }, function(AuthService, $state) {
+    $transitions.onStart( { to: 'common.mail.inbox' }, function(AuthService, $state) {
         "ngInject";
 
         if (!AuthService.checkAuth) {
@@ -23,13 +23,22 @@ app.run(function($transitions) {
     });
 });
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($urlRouterProvider, $transitionsProvider, $stateProvider) {
     "ngInject";
 
     $urlRouterProvider.when('', '/login');
     $urlRouterProvider.when('/common', '/common/mail/inbox');
     $urlRouterProvider.when('/common/mail', '/common/mail/inbox');
     $urlRouterProvider.otherwise('404');
+
+    $transitionsProvider.onBefore({
+        to: state => !!state.abstract
+    }, ($transition$, $state) => {
+        "ngInject";
+        if (angular.isString($transition$.to().abstract)) {
+            return $state.target($transition$.to().abstract);
+        }
+    });
 
     $stateProvider
         .state('login', {
@@ -38,18 +47,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('common', {
             url: '/common',
-            abstract: true,
+            abstract: 'common.mail',
             template: '<common-page></common-page>'
         })
-        .state('mail', {
+        .state('common.mail', {
             url: '/mail',
-            parent: 'common',
-            abstract: true,
+            abstract: 'common.mail.inbox',
             template: '<mail-boxes></mail-boxes>'
         })
-        .state('inbox', {
+        .state('common.mail.inbox', {
             url: '/inbox',
-            parent: 'mail',
             template: '<inbox-mail></inbox-mail>'
         })
         .state('404', {
