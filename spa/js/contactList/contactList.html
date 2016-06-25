@@ -1,0 +1,12 @@
+<ul class="media-list tab-pane fade in active">
+    <li class="media" ng-repeat="contact in $ctrl.contacts">
+        <div class="media-left media-middle">
+            <a ui-sref="common.contact({id: contact._id})" >
+                <img  class="media-object img-thumbnail" ng-src={{contact.avatarUrl}} alt="Contact">
+            </a>
+        </div>
+        <div class="media-body">
+            <h3>{{contact.fullName}}</h3>
+        </div>
+    </li>
+</ul>

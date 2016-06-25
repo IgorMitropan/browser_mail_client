@@ -1,0 +1,41 @@
+<div class="panel panel-info">
+
+    <div class="panel-heading">
+        <button class="btn btn-xs btn-primary pull-right"
+                type="button" ui-sref="common.contacts">Back</button>
+        <h3 class="panel-title">{{$ctrl.contact.fullName}}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-3 col-lg-3 " align="center">
+                <avatar user="$ctrl.contact"></avatar>
+            </div>
+
+            <div class=" col-md-9 col-lg-9 ">
+                <table class="table table-user-information">
+                    <tbody>
+                    <tr>
+                        <td>BirthDate</td>
+                        <td>{{$ctrl.contact.birthdate}}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{$ctrl.contact.gender}}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>{{$ctrl.contact.address}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>
+                            <mailto email='$ctrl.contact.email'></mailto>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

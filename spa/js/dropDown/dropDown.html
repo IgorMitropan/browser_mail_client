@@ -2,14 +2,14 @@
     <a href id="simple-dropdown" uib-dropdown-toggle>
         <div class="menu">
             <div>
-                {{$ctrl.choice}}
+                {{$ctrl.choice.title || $ctrl.choice}}
                 <span class="caret"></span>
             </div>
         </div>
     </a>
     <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
         <li ng-repeat="choice in $ctrl.items">
-            <a ui-sref="#" ng-click="$ctrl.goToChoice(choice)">{{choice}}</a>
+            <a ng-click="$ctrl.goToChoice(choice)">{{choice.title || choice}}</a>
         </li>
     </ul>
 </span>

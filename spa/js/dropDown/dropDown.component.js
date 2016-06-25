@@ -1,19 +1,24 @@
 import template from './dropDown.html';
 
-function controller () {
+function controller ($state) {
     "ngInject";
 
-    this.choice = 'Mail';
+    this.choice = this.items[0];
 
-    this.toggleDropdown = function ($event) {
+    this.toggleDropdown = ($event) => {
         $event.preventDefault();
         $event.stopPropagation();
     };
 
     this.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 
-    this.goToChoice = function (choice) {
+    this.goToChoice = (choice) => {
         this.choice = choice;
+
+        if (choice.state) {
+            $state.go(choice.state);
+        }
+
     }
 }
 
