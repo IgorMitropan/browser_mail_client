@@ -1,18 +1,15 @@
-<div>
-    <span uib-dropdown on-toggle="toggled(open)">
-        <a href id="simple-dropdown" uib-dropdown-toggle>
-        <div class="control-bar row">
-            <div class="menu col-sm-2">
-                <div>Gmail
-                    <span class="caret"></span>
-                </div>
-            </div><!-- menu -->
+<span uib-dropdown on-toggle="toggled(open)">
+    <a href id="simple-dropdown" uib-dropdown-toggle>
+        <div class="menu">
+            <div>
+                {{$ctrl.choice}}
+                <span class="caret"></span>
+            </div>
         </div>
-        </a>
+    </a>
     <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
         <li ng-repeat="choice in $ctrl.items">
-            <a href>{{choice}}</a>
+            <a ui-sref="#" ng-click="$ctrl.goToChoice(choice)">{{choice}}</a>
         </li>
     </ul>
-    </span>
-</div>
+</span>

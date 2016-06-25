@@ -1,4 +1,3 @@
-
 <div class="container-fluid">
     <header class="row">
         <div class="logo col-sm-2">
@@ -20,46 +19,36 @@
 
         <div class="profile col-sm-4">
             <ul class="profile-icons list-inline pull-right">
-                <li>Nizar</li>
+                <li>{{$ctrl.userName}}</li>
                 <li>
-                    <span class="glyphicon glyphicon-th"></span>
-                </li>
-                <li class="bell">
-                    <span class="glyphicon glyphicon-bell"></span>
-                </li>
-                <li>
-                    <img ng-src="img/profile.jpg" class="img-circle">
+                    <img ng-src={{$ctrl.photoUrl}} class="img-circle">
                 </li>
             </ul>
         </div><!-- profile -->
     </header>
 
+    <div class="control-bar row">
+        <div class="col-sm-2">
+            <drop-down items="['Mail', 'Contacts']"></drop-down>
+        </div><!-- menu -->
 
-    <drop-down items="['Mail', 'Contacts']"></drop-down>
-
-
-    <div class="controls col-sm-10">
-        <ul class="control-list list-inline">
-            <li>
-                <button class="btn btn-control">
-                    <input type="checkbox" class="mail-select">
-                    <span class="caret"></span>
-                </button>
-            </li>
-            <li>
-                <button class="btn btn-control">
-                    <span class="glyphicon glyphicon-repeat"></span>
-                </button>
-            </li>
-            <li>
-                <button class="text-btn btn btn-control">
-                    <strong>More</strong>
-                    <span class="caret"></span>
-                </button>
-            </li>
-        </ul>
-    </div><!-- controls -->
-</div><!-- control-bar -->
+        <div class="controls col-sm-10">
+            <ul class="control-list list-inline">
+                <li>
+                    <button class="btn btn-control">
+                        <input type="checkbox" class="mail-select">
+                        <span class="caret"></span>
+                    </button>
+                </li>
+                <li>
+                    <button class="btn btn-control">
+                        <span class="glyphicon glyphicon-repeat"></span>
+                    </button>
+                </li>
+            </ul>
+        </div><!-- controls -->
+    </div><!-- control-bar -->
+</div>
 
 <div class="mail row">
     <div class="sidebar col-sm-2">
@@ -107,7 +96,8 @@
                     <div class="clipper">
                         <h3>About your pizza</h3>
                         -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us know because there are a lot of hungry people in the world.</p>
+                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
+                            know because there are a lot of hungry people in the world.</p>
                     </div>
                 </div><!-- message -->
 
@@ -139,7 +129,8 @@
                     <div class="clipper">
                         <h3>About your pizza</h3>
                         -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us know because there are a lot of hungry people in the world.</p>
+                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
+                            know because there are a lot of hungry people in the world.</p>
                     </div>
                 </div><!-- message -->
 
@@ -171,7 +162,8 @@
                     <div class="clipper">
                         <h3>About your pizza</h3>
                         -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us know because there are a lot of hungry people in the world.</p>
+                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
+                            know because there are a lot of hungry people in the world.</p>
                     </div>
                 </div><!-- message -->
 
@@ -202,7 +194,8 @@
                     <div class="clipper">
                         <h3>About your pizza</h3>
                         -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us know because there are a lot of hungry people in the world.</p>
+                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
+                            know because there are a lot of hungry people in the world.</p>
                     </div>
                 </div><!-- message -->
 
@@ -234,7 +227,8 @@
                     <div class="clipper">
                         <h3>About your pizza</h3>
                         -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us know because there are a lot of hungry people in the world.</p>
+                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
+                            know because there are a lot of hungry people in the world.</p>
                     </div>
                 </div><!-- message -->
 

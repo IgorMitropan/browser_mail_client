@@ -14,11 +14,9 @@ app.run(function($transitions) {
     $transitions.onStart( { to: 'common' }, function(AuthService, $state) {
         "ngInject";
 
-        // If the user is not authenticated
-        if (!AuthService.checkAuth()) {
+        if (!AuthService.checkAuth) {
             alert('Wrong Login or password!');
 
-            // Redirect to a state that we know doesn't require auth.
             return $state.target("login");
         }
     });
@@ -43,7 +41,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 app.component('login', login);
 app.component('commonPage', commonPage);
-
 app.component('dropDown', dropDown);
 
 

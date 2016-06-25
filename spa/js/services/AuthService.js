@@ -1,18 +1,29 @@
 'use strict';
+const userProfile = {
+    userName: 'John',
+    photo: 'img/profile.jpg',
+    login: '',
+    password: ''
+};
 
-export default function() {
-    this.rightParams = {
-        login: '',
-        password: ''
-    };
+export default class AuthService {
+    constructor() {
+        this._isAuthorized = false;
+    }
 
-    this.isAuthorized = false;
+    get checkAuth() {
+        return this._isAuthorized;
+    }
 
-    this.signIn = (login, password) => {
-        this.isAuthorized = (login === this.rightParams.login && password === this.rightParams.password);
-    };
+    signIn (login, password) {
+        this._isAuthorized = (login === userProfile.login && password === userProfile.password);
+    }
 
-    this.checkAuth = () => {
-        return this.isAuthorized;
+    getAuthUser () {
+        return {
+            userName: userProfile.userName,
+            photo: userProfile.photo
+        }
     }
 }
+

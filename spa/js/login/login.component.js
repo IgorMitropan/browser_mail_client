@@ -1,18 +1,20 @@
 'use strict';
 import template from "./login.html";
 
-export default {
-    template: template,
-    controller: function($state, AuthService) {
-        "ngInject";
+function controller ($state, AuthService) {
+    "ngInject";
 
-        this.login = '';
-        this.password = '';
+    this.login = '';
+    this.password = '';
 
-        this.go = () => {
-            AuthService.signIn(this.login, this.password);
+    this.go = () => {
+        AuthService.signIn(this.login, this.password);
 
-            $state.go('common');
-        }
+        $state.go('common');
     }
+}
+
+export default {
+    template,
+    controller
 }
