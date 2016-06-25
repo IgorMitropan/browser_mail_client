@@ -2,8 +2,8 @@
 
 export default function() {
     this.rightParams = {
-        login: '123@i',
-        password: '456'
+        login: '',
+        password: ''
     };
 
     this.isAuthorized = false;
