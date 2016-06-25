@@ -175,3 +175,9 @@ input.mail-select {
 .login-title {
     text-align: center;
 }
+.logout {
+    margin-top: 5px;
+}
+.logout:hover {
+    font-size: 120%;
+}

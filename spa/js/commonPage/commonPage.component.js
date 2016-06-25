@@ -1,13 +1,18 @@
 'use strict';
 import template from "./commonPage.html";
 
-function controller (AuthService) {
+function controller (AuthService, $state) {
     "ngInject";
     
-    let user = AuthService.getAuthUser();
+    let user = AuthService.authUser;
 
     this.userName = user.userName;
     this.photoUrl = user.photo;
+    
+    this.signOut = () => {
+        AuthService.signOut();
+        $state.go('login');
+    }
 }
 
 export default {

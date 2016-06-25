@@ -1,10 +1,15 @@
 <div class="container-fluid">
     <header class="row">
-        <div class="logo col-sm-2">
-            <img ng-src="img/google.png" alt="Google">
-        </div><!-- logo -->
+        <div class="logo col-sm-5">
+            <ul class="profile-icons list-inline pull-left">
+                <li>
+                    <img ng-src={{$ctrl.photoUrl}} class="img-circle">
+                </li>
+                <li>{{$ctrl.userName}}</li>
+            </ul>
+        </div><!-- profile -->
 
-        <div class="search-bar col-sm-6">
+        <div class="search-bar col-sm-5">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search for...">
             <span class="input-group-btn">
@@ -15,16 +20,13 @@
             </div><!-- /input-group -->
 
             <span class="arrow caret"></span>
+
         </div><!-- search-bar -->
 
-        <div class="profile col-sm-4">
-            <ul class="profile-icons list-inline pull-right">
-                <li>{{$ctrl.userName}}</li>
-                <li>
-                    <img ng-src={{$ctrl.photoUrl}} class="img-circle">
-                </li>
-            </ul>
-        </div><!-- profile -->
+        <div class="profile col-sm-2">
+            <a class="logout pull-right" ng-click="$ctrl.signOut()">Sign out <span class="glyphicon glyphicon-log-out"></span></a>
+
+        </div><!-- logout -->
     </header>
 
     <div class="control-bar row">
@@ -51,192 +53,6 @@
 </div>
 
 <div class="mail row">
-    <div class="sidebar col-sm-2">
-        <button class="compose btn btn-danger">
-            Compose
-        </button>
-
-        <ul class="inbox-sections list-unstyled">
-            <li class="active">
-                Inbox (100)
-            </li>
-            <li>Sent Mail</li>
-            <li class="pending">
-                Drafts (7)
-            </li>
-            <li>All Mail</li>
-            <li class="pending">
-                Spam (1)
-            </li>
-        </ul>
-    </div><!-- sidebar -->
-
-    <div class="inbox col-sm-10">
-        <ul class="list-unstyled">
-            <li class="email-item row unread">
-                <div class="people col-sm-3">
-                    <ul class="mail-icons list-inline">
-                        <li>
-                            <input type="checkbox" class="mail-select">
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-cutlery"></span>
-                        </li>
-                    </ul>
-
-                <span class="people-names">
-                  Nizar Khalife
-                </span>
-                </div><!-- people -->
-
-                <div class="message col-sm-7">
-                    <div class="clipper">
-                        <h3>About your pizza</h3>
-                        -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
-                            know because there are a lot of hungry people in the world.</p>
-                    </div>
-                </div><!-- message -->
-
-                <div class="date col-sm-2">
-                    <date class="pull-right">11:27 a.m.</date>
-                </div><!-- date -->
-            </li>
-
-            <li class="email-item row">
-                <div class="people col-sm-3">
-                    <ul class="mail-icons list-inline">
-                        <li>
-                            <input type="checkbox" class="mail-select">
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-cutlery"></span>
-                        </li>
-                    </ul>
-
-                <span class="people-names">
-                  Nizar Khalife
-                </span>
-                </div><!-- people -->
-
-                <div class="message col-sm-7">
-                    <div class="clipper">
-                        <h3>About your pizza</h3>
-                        -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
-                            know because there are a lot of hungry people in the world.</p>
-                    </div>
-                </div><!-- message -->
-
-                <div class="date col-sm-2">
-                    <date class="pull-right">11:27 a.m.</date>
-                </div><!-- date -->
-            </li>
-
-            <li class="email-item row unread">
-                <div class="people col-sm-3">
-                    <ul class="mail-icons list-inline">
-                        <li>
-                            <input type="checkbox" class="mail-select">
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-cutlery"></span>
-                        </li>
-                    </ul>
-
-                <span class="people-names">
-                  Nizar Khalife
-                </span>
-                </div><!-- people -->
-
-                <div class="message col-sm-7">
-                    <div class="clipper">
-                        <h3>About your pizza</h3>
-                        -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
-                            know because there are a lot of hungry people in the world.</p>
-                    </div>
-                </div><!-- message -->
-
-                <div class="date col-sm-2">
-                    <date class="pull-right">11:27 a.m.</date>
-                </div><!-- date -->
-            </li>
-            <li class="email-item row">
-                <div class="people col-sm-3">
-                    <ul class="mail-icons list-inline">
-                        <li>
-                            <input type="checkbox" class="mail-select">
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-cutlery"></span>
-                        </li>
-                    </ul>
-
-                <span class="people-names">
-                  Nizar Khalife
-                </span>
-                </div><!-- people -->
-
-                <div class="message col-sm-7">
-                    <div class="clipper">
-                        <h3>About your pizza</h3>
-                        -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
-                            know because there are a lot of hungry people in the world.</p>
-                    </div>
-                </div><!-- message -->
-
-                <div class="date col-sm-2">
-                    <date class="pull-right">11:27 a.m.</date>
-                </div><!-- date -->
-            </li>
-
-            <li class="email-item row">
-                <div class="people col-sm-3">
-                    <ul class="mail-icons list-inline">
-                        <li>
-                            <input type="checkbox" class="mail-select">
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-cutlery"></span>
-                        </li>
-                    </ul>
-
-                <span class="people-names">
-                  Nizar Khalife
-                </span>
-                </div><!-- people -->
-
-                <div class="message col-sm-7">
-                    <div class="clipper">
-                        <h3>About your pizza</h3>
-                        -
-                        <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us
-                            know because there are a lot of hungry people in the world.</p>
-                    </div>
-                </div><!-- message -->
-
-                <div class="date col-sm-2">
-                    <date class="pull-right">11:27 a.m.</date>
-                </div><!-- date -->
-            </li>
-        </ul>
-    </div><!-- inbox -->
-</div><!-- mail -->
+    <div ui-view></div>
 </div>
+
