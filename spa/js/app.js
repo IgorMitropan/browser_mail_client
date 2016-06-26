@@ -18,7 +18,7 @@ const app = angular.module('mailApp', ['ui.router', 'restangular', 'ui.bootstrap
 
 app.config(router);
 app.config(function(RestangularProvider) {
-    RestangularProvider.setBaseUrl('http://test-api.javascript.ru/v1//imytropan');
+    RestangularProvider.setBaseUrl('https://test-api.javascript.ru/v1//imytropan');
 });
 
 app.run(function($transitions) {
