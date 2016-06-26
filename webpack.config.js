@@ -4,11 +4,15 @@ let webpack = require('webpack');
 let ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
-    entry: ['./spa/js/app.js'],
+    entry: {
+        build: ['./spa/js/app.js'],
+        vendor: ['angular', 'angular-ui-router', 'lodash', 'restangular', './ui.bootstrap/ui-bootstrap-tpls-1.3.3.min.js']
+    },
     output: {
         path: './public/js/',
         publicPath: './public/',
-        filename: "build.js"
+        filename: "[name].js",
+        library:  "[name]"
     },
 
     watch: true,
@@ -39,6 +43,10 @@ module.exports = {
             compress: {
                 warnings: false
             }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: Infinity
         })
     ]
 
