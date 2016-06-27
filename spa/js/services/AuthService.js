@@ -25,7 +25,7 @@ export default class AuthService {
     }
 
     signIn (login, password) {
-        this._isAuthorized = (login === userProfile.login  && password === userProfile.password);
+        this._isAuthorized = (login === userProfile.login && password === userProfile.password);
         
         this._authUser = {
             userName: userProfile.userName,

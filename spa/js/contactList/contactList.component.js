@@ -1,18 +1,17 @@
 'use strict';
 import template from "./contactList.html";
 
-function controller (Restangular, $filter) {
+function controller ($filter) {
     "ngInject";
-
-    this.contacts = [];
-    Restangular.all('users').getList()
-        .then(contacts => {
-            this.contacts = $filter('orderBy')(contacts, 'fullName');
-        })
+    
+    this.contacts = $filter('orderBy')(this.contacts, 'fullName');
 }
 
 export default {
     template,
+    bindings: {
+        contacts: '<'
+    },
     controller
 }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-export default function($urlRouterProvider, $transitionsProvider, $stateProvider) {
+export default function ($urlRouterProvider, $transitionsProvider, $stateProvider) {
     "ngInject";
 
     $urlRouterProvider.when('', '/login');
@@ -16,45 +16,73 @@ export default function($urlRouterProvider, $transitionsProvider, $stateProvider
             return $state.target($transition$.to().abstract);
         }
     });
+    $transitionsProvider.onStart({to: state => state.requiresAuth}, function (AuthService, $state) {
+        "ngInject";
+
+        if (!AuthService.checkAuth) {
+            return $state.target("login");
+        }
+    });
+
 
     $stateProvider
         .state('login', {
             url: '/login',
-            template: '<login></login>'
+            template: '<login></login>',
+            requiresAuth: false
         })
         .state('common', {
             url: '/common',
-            abstract: 'common.mail',
-            template: '<common-page></common-page>'
+            abstract: 'mail',
+            template: '<common-page></common-page>',
+            requiresAuth: true
         })
-        .state('common.mail', {
+        .state('mail', {
             url: '/mail',
-            abstract: 'common.mail.inbox',
-            template: '<mail-boxes></mail-boxes>'
+            parent: 'common',
+            abstract: 'inbox',
+            template: '<mail-boxes></mail-boxes>',
+            requiresAuth: true
         })
-        .state('common.mail.inbox', {
+        .state('inbox', {
             url: '/inbox',
-            template: '<inbox-mail></inbox-mail>'
+            parent: 'mail',
+            template: '<inbox-mail></inbox-mail>',
+            requiresAuth: true
         })
-        .state('common.contacts', {
+        .state('contacts', {
             url: '/contacts',
-            template: '<contact-list></contact-list>'
+            parent: 'common',
+            template: '<contact-list contacts="contacts"></contact-list>',
+            requiresAuth: true,
+            resolve: {
+                contacts: (Restangular) => {
+                    "ngInject";
+                    return Restangular.all('users').getList();
+                }
+            },
+            controller: function ($scope, contacts) {
+                $scope.contacts = contacts;
+            }
         })
-        .state('common.contact', {
+        .state('contact', {
             url: '/contacts/:id',
+            parent: 'common',
             template: '<contact-details contact="contact"></contact-details>',
+            requiresAuth: true,
             resolve: {
                 contact: (Restangular, $stateParams) => {
                     "ngInject";
                     return Restangular.one('users', $stateParams.id).get();
                 }
             },
-            controller: function($scope, contact) {
+            controller: function ($scope, contact) {
                 $scope.contact = contact;
             }
         })
         .state('404', {
             url: '/404',
-            template: '<error-404></error-404>'
+            template: '<error-404></error-404>',
+            requiresAuth: false
         })
 }

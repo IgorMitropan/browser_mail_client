@@ -23,18 +23,6 @@ app.config(function(RestangularProvider) {
     RestangularProvider.setBaseUrl('https://test-api.javascript.ru/v1//imytropan');
 });
 
-app.run(function($transitions) {
-    "ngInject";
-
-    $transitions.onStart( { to: 'common.mail.inbox' }, function(AuthService, $state) {
-        "ngInject";
-
-        if (!AuthService.checkAuth) {
-            return $state.target("login");
-        }
-    });
-});
-
 app.component('login', login);
 app.component('commonPage', commonPage);
 app.component('mailBoxes', mailBoxes);

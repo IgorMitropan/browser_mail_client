@@ -110,18 +110,6 @@
 	    RestangularProvider.setBaseUrl('https://test-api.javascript.ru/v1//imytropan');
 	}]);
 
-	app.run(["$transitions", function ($transitions) {
-	    "ngInject";
-
-	    $transitions.onStart({ to: 'common.mail.inbox' }, ["AuthService", "$state", function (AuthService, $state) {
-	        "ngInject";
-
-	        if (!AuthService.checkAuth) {
-	            return $state.target("login");
-	        }
-	    }]);
-	}]);
-
 	app.component('login', _loginComponent2.default);
 	app.component('commonPage', _commonPageComponent2.default);
 	app.component('mailBoxes', _mailBoxesComponent2.default);
@@ -164,27 +152,56 @@
 	            return $state.target($transition$.to().abstract);
 	        }
 	    }]);
+	    $transitionsProvider.onStart({ to: function to(state) {
+	            return state.requiresAuth;
+	        } }, ["AuthService", "$state", function (AuthService, $state) {
+	        "ngInject";
+
+	        if (!AuthService.checkAuth) {
+	            return $state.target("login");
+	        }
+	    }]);
 
 	    $stateProvider.state('login', {
 	        url: '/login',
-	        template: '<login></login>'
+	        template: '<login></login>',
+	        requiresAuth: false
 	    }).state('common', {
 	        url: '/common',
-	        abstract: 'common.mail',
-	        template: '<common-page></common-page>'
-	    }).state('common.mail', {
+	        abstract: 'mail',
+	        template: '<common-page></common-page>',
+	        requiresAuth: true
+	    }).state('mail', {
 	        url: '/mail',
-	        abstract: 'common.mail.inbox',
-	        template: '<mail-boxes></mail-boxes>'
-	    }).state('common.mail.inbox', {
+	        parent: 'common',
+	        abstract: 'inbox',
+	        template: '<mail-boxes></mail-boxes>',
+	        requiresAuth: true
+	    }).state('inbox', {
 	        url: '/inbox',
-	        template: '<inbox-mail></inbox-mail>'
-	    }).state('common.contacts', {
+	        parent: 'mail',
+	        template: '<inbox-mail></inbox-mail>',
+	        requiresAuth: true
+	    }).state('contacts', {
 	        url: '/contacts',
-	        template: '<contact-list></contact-list>'
-	    }).state('common.contact', {
+	        parent: 'common',
+	        template: '<contact-list contacts="contacts"></contact-list>',
+	        requiresAuth: true,
+	        resolve: {
+	            contacts: ["Restangular", function contacts(Restangular) {
+	                "ngInject";
+
+	                return Restangular.all('users').getList();
+	            }]
+	        },
+	        controller: ["$scope", "contacts", function controller($scope, contacts) {
+	            $scope.contacts = contacts;
+	        }]
+	    }).state('contact', {
 	        url: '/contacts/:id',
+	        parent: 'common',
 	        template: '<contact-details contact="contact"></contact-details>',
+	        requiresAuth: true,
 	        resolve: {
 	            contact: ["Restangular", "$stateParams", function contact(Restangular, $stateParams) {
 	                "ngInject";
@@ -197,7 +214,8 @@
 	        }]
 	    }).state('404', {
 	        url: '/404',
-	        template: '<error-404></error-404>'
+	        template: '<error-404></error-404>',
+	        requiresAuth: false
 	    });
 	}];
 
@@ -242,7 +260,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>\n    <form class=\"form-signin login-form\" name=\"loginForm\" ng-submit=\"$ctrl.signIn()\" novalidate>\n        <h2 class=\"form-signin-heading login-title\">Please sign in</h2>\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }\">\n            <label for=\"inputEmail\" class=\"sr-only\">Email address</label>\n            <input type=\"email\" name=\"email\" id=\"inputEmail\" class=\"form-control\" placeholder=\"Email address\"\n                   required=\"\" autofocus=\"\"\n                   ng-model=\"$ctrl.login\">\n            <div ng-messages=\"loginForm.email.$error\">\n                <div ng-message=\"email\"  class=\"alert alert-danger\">Enter a valid\n                    email.</div>\n            </div>\n        </div>\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }\">\n            <label for=\"inputPassword\" class=\"sr-only\">Password</label>\n            <input type=\"password\" name=\"password\" id=\"inputPassword\" class=\"form-control\" placeholder=\"Password\" required=\"\"\n                   ng-model=\"$ctrl.password\" ng-minlength=\"2\" autofocus=\"\">\n\n            <div ng-show=\"loginForm.password.$error.minlength\" class=\"alert alert-danger\">Password is too short.</div>\n        </div>\n\n        <button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Sign in</button>\n    </form>\n</div>\n";
+	module.exports = "<div>\r\n    <form class=\"form-signin login-form\" name=\"loginForm\" ng-submit=\"$ctrl.signIn()\" novalidate>\r\n        <h2 class=\"form-signin-heading login-title\">Please sign in</h2>\r\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }\">\r\n            <label for=\"inputEmail\" class=\"sr-only\">Email address</label>\r\n            <input type=\"email\" name=\"email\" id=\"inputEmail\" class=\"form-control\" placeholder=\"Email address\"\r\n                   required=\"\" autofocus=\"\"\r\n                   ng-model=\"$ctrl.login\">\r\n            <div ng-messages=\"loginForm.email.$error\">\r\n                <div ng-message=\"email\"  class=\"alert alert-danger\">Enter a valid\r\n                    email.</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }\">\r\n            <label for=\"inputPassword\" class=\"sr-only\">Password</label>\r\n            <input type=\"password\" name=\"password\" id=\"inputPassword\" class=\"form-control\" placeholder=\"Password\" required=\"\"\r\n                   ng-model=\"$ctrl.password\" ng-minlength=\"2\" autofocus=\"\">\r\n\r\n            <div ng-show=\"loginForm.password.$error.minlength\" class=\"alert alert-danger\">Password is too short.</div>\r\n        </div>\r\n\r\n        <button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Sign in</button>\r\n    </form>\r\n</div>\r\n";
 
 /***/ },
 /* 5 */
@@ -284,7 +302,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n    <header class=\"row\">\n        <div class=\"logo col-sm-5\">\n            <ul class=\"profile-icons list-inline pull-left\">\n                <li>\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\n                </li>\n                <li>{{$ctrl.userName}}</li>\n            </ul>\n        </div><!-- profile -->\n\n        <div class=\"search-bar col-sm-5\">\n            <div class=\"input-group\">\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-main\">\n                  <span class=\"glyphicon glyphicon-search\"></span>\n              </button>\n            </span>\n            </div><!-- /input-group -->\n\n            <span class=\"arrow caret\"></span>\n\n        </div><!-- search-bar -->\n\n        <div class=\"profile col-sm-2\">\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\n\n        </div><!-- logout -->\n    </header>\n\n    <div class=\"control-bar row\">\n        <div class=\"col-sm-2\">\n            <drop-down items=\"[{title:'Mail', state:'common.mail'}, {title:'Contacts', state:'common.contacts'}]\"></drop-down>\n        </div><!-- menu -->\n\n        <div class=\"controls col-sm-10\">\n            <ul class=\"control-list list-inline\">\n                <li>\n                    <button class=\"btn btn-control\">\n                        <input type=\"checkbox\" class=\"mail-select\">\n                        <span class=\"caret\"></span>\n                    </button>\n                </li>\n                <li>\n                    <button class=\"btn btn-control\">\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\n                    </button>\n                </li>\n            </ul>\n        </div><!-- controls -->\n    </div><!-- control-bar -->\n</div>\n\n<div class=\"mail row\">\n    <div ui-view></div>\n</div>\n\n";
+	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"input-group\">\r\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\">\r\n            <span class=\"input-group-btn\">\r\n              <button class=\"btn btn-main\">\r\n                  <span class=\"glyphicon glyphicon-search\"></span>\r\n              </button>\r\n            </span>\r\n            </div><!-- /input-group -->\r\n\r\n            <span class=\"arrow caret\"></span>\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"[{title:'Mail', state:'mail'}, {title:'Contacts', state:'contacts'}]\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\">\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                        <span class=\"caret\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view></div>\r\n</div>\r\n\r\n";
 
 /***/ },
 /* 7 */
@@ -310,7 +328,7 @@
 /* 8 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"sidebar col-sm-2\">\n    <button class=\"compose btn btn-danger\">\n        Compose\n    </button>\n\n    <ul class=\"inbox-sections list-unstyled\">\n        <li class=\"active\">\n            Inbox (100)\n        </li>\n        <li>Sent Mail</li>\n        <li class=\"pending\">\n            Drafts (7)\n        </li>\n        <li>All Mail</li>\n        <li class=\"pending\">\n            Spam (1)\n        </li>\n    </ul>\n</div><!-- sidebar -->\n\n<div ui-view></div>";
+	module.exports = "<div class=\"sidebar col-sm-2\">\r\n    <button class=\"compose btn btn-danger\">\r\n        Compose\r\n    </button>\r\n\r\n    <ul class=\"inbox-sections list-unstyled\">\r\n        <li class=\"active\">\r\n            Inbox (100)\r\n        </li>\r\n        <li>Sent Mail</li>\r\n        <li class=\"pending\">\r\n            Drafts (7)\r\n        </li>\r\n        <li>All Mail</li>\r\n        <li class=\"pending\">\r\n            Spam (1)\r\n        </li>\r\n    </ul>\r\n</div><!-- sidebar -->\r\n\r\n<div ui-view></div>";
 
 /***/ },
 /* 9 */
@@ -336,7 +354,7 @@
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"inbox col-sm-10\">\n    <ul class=\"list-unstyled\">\n        <li class=\"email-item row unread\">\n            <div class=\"people col-sm-3\">\n                <ul class=\"mail-icons list-inline\">\n                    <li>\n                        <input type=\"checkbox\" class=\"mail-select\">\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\n                    </li>\n                </ul>\n\n<span class=\"people-names\">\nNizar Khalife\n</span>\n            </div><!-- people -->\n\n            <div class=\"message col-sm-7\">\n                <div class=\"clipper\">\n                    <h3>About your pizza</h3>\n                    -\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\n                        know because there are a lot of hungry people in the world.</p>\n                </div>\n            </div><!-- message -->\n\n            <div class=\"date col-sm-2\">\n                <date class=\"pull-right\">11:27 a.m.</date>\n            </div><!-- date -->\n        </li>\n\n        <li class=\"email-item row\">\n            <div class=\"people col-sm-3\">\n                <ul class=\"mail-icons list-inline\">\n                    <li>\n                        <input type=\"checkbox\" class=\"mail-select\">\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\n                    </li>\n                </ul>\n\n<span class=\"people-names\">\nNizar Khalife\n</span>\n            </div><!-- people -->\n\n            <div class=\"message col-sm-7\">\n                <div class=\"clipper\">\n                    <h3>About your pizza</h3>\n                    -\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\n                        know because there are a lot of hungry people in the world.</p>\n                </div>\n            </div><!-- message -->\n\n            <div class=\"date col-sm-2\">\n                <date class=\"pull-right\">11:27 a.m.</date>\n            </div><!-- date -->\n        </li>\n\n        <li class=\"email-item row unread\">\n            <div class=\"people col-sm-3\">\n                <ul class=\"mail-icons list-inline\">\n                    <li>\n                        <input type=\"checkbox\" class=\"mail-select\">\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\n                    </li>\n                </ul>\n\n<span class=\"people-names\">\nNizar Khalife\n</span>\n            </div><!-- people -->\n\n            <div class=\"message col-sm-7\">\n                <div class=\"clipper\">\n                    <h3>About your pizza</h3>\n                    -\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\n                        know because there are a lot of hungry people in the world.</p>\n                </div>\n            </div><!-- message -->\n\n            <div class=\"date col-sm-2\">\n                <date class=\"pull-right\">11:27 a.m.</date>\n            </div><!-- date -->\n        </li>\n        <li class=\"email-item row\">\n            <div class=\"people col-sm-3\">\n                <ul class=\"mail-icons list-inline\">\n                    <li>\n                        <input type=\"checkbox\" class=\"mail-select\">\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\n                    </li>\n                </ul>\n\n<span class=\"people-names\">\nNizar Khalife\n</span>\n            </div><!-- people -->\n\n            <div class=\"message col-sm-7\">\n                <div class=\"clipper\">\n                    <h3>About your pizza</h3>\n                    -\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\n                        know because there are a lot of hungry people in the world.</p>\n                </div>\n            </div><!-- message -->\n\n            <div class=\"date col-sm-2\">\n                <date class=\"pull-right\">11:27 a.m.</date>\n            </div><!-- date -->\n        </li>\n\n        <li class=\"email-item row\">\n            <div class=\"people col-sm-3\">\n                <ul class=\"mail-icons list-inline\">\n                    <li>\n                        <input type=\"checkbox\" class=\"mail-select\">\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\n                    </li>\n                    <li>\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\n                    </li>\n                </ul>\n\n<span class=\"people-names\">\nNizar Khalife\n</span>\n            </div><!-- people -->\n\n            <div class=\"message col-sm-7\">\n                <div class=\"clipper\">\n                    <h3>About your pizza</h3>\n                    -\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\n                        know because there are a lot of hungry people in the world.</p>\n                </div>\n            </div><!-- message -->\n\n            <div class=\"date col-sm-2\">\n                <date class=\"pull-right\">11:27 a.m.</date>\n            </div><!-- date -->\n        </li>\n    </ul>\n</div><!-- inbox -->\n</div><!-- mail -->";
+	module.exports = "<div class=\"inbox col-sm-10\">\r\n    <ul class=\"list-unstyled\">\r\n        <li class=\"email-item row unread\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n\r\n        <li class=\"email-item row\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n\r\n        <li class=\"email-item row unread\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n        <li class=\"email-item row\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n\r\n        <li class=\"email-item row\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n    </ul>\r\n</div><!-- inbox -->\r\n</div><!-- mail -->";
 
 /***/ },
 /* 11 */
@@ -344,7 +362,7 @@
 
 	'use strict';
 
-	controller.$inject = ["Restangular", "$filter"];
+	controller.$inject = ["$filter"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -355,19 +373,17 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function controller(Restangular, $filter) {
+	function controller($filter) {
 	    "ngInject";
 
-	    var _this = this;
-
-	    this.contacts = [];
-	    Restangular.all('users').getList().then(function (contacts) {
-	        _this.contacts = $filter('orderBy')(contacts, 'fullName');
-	    });
+	    this.contacts = $filter('orderBy')(this.contacts, 'fullName');
 	}
 
 	exports.default = {
 	    template: _contactList2.default,
+	    bindings: {
+	        contacts: '<'
+	    },
 	    controller: controller
 	};
 
@@ -375,7 +391,7 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"media-list tab-pane fade in active\">\n    <li class=\"media\" ng-repeat=\"contact in $ctrl.contacts\">\n        <div class=\"media-left media-middle\">\n            <a ui-sref=\"common.contact({id: contact._id})\" >\n                <img  class=\"media-object img-thumbnail\" ng-src={{contact.avatarUrl}} alt=\"Contact\">\n            </a>\n        </div>\n        <div class=\"media-body\">\n            <h3>{{contact.fullName}}</h3>\n        </div>\n    </li>\n</ul>";
+	module.exports = "<ul class=\"media-list tab-pane fade in active\">\r\n    <li class=\"media\" ng-repeat=\"contact in $ctrl.contacts\">\r\n        <div class=\"media-left media-middle\">\r\n            <a ui-sref=\"contact({id: contact._id})\" >\r\n                <img  class=\"media-object img-thumbnail\" ng-src={{contact.avatarUrl}} alt=\"Contact\">\r\n            </a>\r\n        </div>\r\n        <div class=\"media-body\">\r\n            <h3>{{contact.fullName}}</h3>\r\n        </div>\r\n    </li>\r\n</ul>";
 
 /***/ },
 /* 13 */
@@ -413,7 +429,7 @@
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"panel panel-info\">\n\n    <div class=\"panel-heading\">\n        <button class=\"btn btn-xs btn-primary pull-right\"\n                type=\"button\" ui-sref=\"common.contacts\">Back</button>\n        <h3 class=\"panel-title\">{{$ctrl.contact.fullName}}</h3>\n    </div>\n    <div class=\"panel-body\">\n        <div class=\"row\">\n\n            <div class=\"col-md-3 col-lg-3 \" align=\"center\">\n                <avatar user=\"$ctrl.contact\"></avatar>\n            </div>\n\n            <div class=\" col-md-9 col-lg-9 \">\n                <table class=\"table table-user-information\">\n                    <tbody>\n                    <tr>\n                        <td>BirthDate</td>\n                        <td>{{$ctrl.contact.birthdate}}</td>\n                    </tr>\n                    <tr>\n                        <td>Gender</td>\n                        <td>{{$ctrl.contact.gender}}</td>\n                    </tr>\n                    <tr>\n                        <td>Address</td>\n                        <td>{{$ctrl.contact.address}}</td>\n                    </tr>\n                    <tr>\n                        <td>Email</td>\n                        <td>\n                            <mailto email='$ctrl.contact.email'></mailto>\n                        </td>\n                    </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n    </div>\n</div>";
+	module.exports = "<div class=\"panel panel-info\">\r\n\r\n    <div class=\"panel-heading\">\r\n        <button class=\"btn btn-xs btn-primary pull-right\"\r\n                type=\"button\" ui-sref=\"contacts\">Back</button>\r\n        <h3 class=\"panel-title\">{{$ctrl.contact.fullName}}</h3>\r\n    </div>\r\n    <div class=\"panel-body\">\r\n        <div class=\"row\">\r\n\r\n            <div class=\"col-md-3 col-lg-3 \" align=\"center\">\r\n                <avatar user=\"$ctrl.contact\"></avatar>\r\n            </div>\r\n\r\n            <div class=\" col-md-9 col-lg-9 \">\r\n                <table class=\"table table-user-information\">\r\n                    <tbody>\r\n                    <tr>\r\n                        <td>BirthDate</td>\r\n                        <td>{{$ctrl.contact.birthdate}}</td>\r\n                    </tr>\r\n                    <tr>\r\n                        <td>Gender</td>\r\n                        <td>{{$ctrl.contact.gender}}</td>\r\n                    </tr>\r\n                    <tr>\r\n                        <td>Address</td>\r\n                        <td>{{$ctrl.contact.address}}</td>\r\n                    </tr>\r\n                    <tr>\r\n                        <td>Email</td>\r\n                        <td>\r\n                            <mailto email='$ctrl.contact.email'></mailto>\r\n                        </td>\r\n                    </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>";
 
 /***/ },
 /* 15 */
@@ -467,7 +483,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<span uib-dropdown on-toggle=\"toggled(open)\">\n    <a href id=\"simple-dropdown\" uib-dropdown-toggle>\n        <div class=\"menu\">\n            <div>\n                {{$ctrl.choice.title || $ctrl.choice}}\n                <span class=\"caret\"></span>\n            </div>\n        </div>\n    </a>\n    <ul class=\"dropdown-menu\" uib-dropdown-menu aria-labelledby=\"simple-dropdown\">\n        <li ng-repeat=\"choice in $ctrl.items\">\n            <a ng-click=\"$ctrl.goToChoice(choice)\">{{choice.title || choice}}</a>\n        </li>\n    </ul>\n</span>";
+	module.exports = "<span uib-dropdown on-toggle=\"toggled(open)\">\r\n    <a href id=\"simple-dropdown\" uib-dropdown-toggle>\r\n        <div class=\"menu\">\r\n            <div>\r\n                {{$ctrl.choice.title || $ctrl.choice}}\r\n                <span class=\"caret\"></span>\r\n            </div>\r\n        </div>\r\n    </a>\r\n    <ul class=\"dropdown-menu\" uib-dropdown-menu aria-labelledby=\"simple-dropdown\">\r\n        <li ng-repeat=\"choice in $ctrl.items\">\r\n            <a ng-click=\"$ctrl.goToChoice(choice)\">{{choice.title || choice}}</a>\r\n        </li>\r\n    </ul>\r\n</span>";
 
 /***/ },
 /* 17 */
@@ -496,7 +512,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>\n    <img ng-src=\"{{$ctrl.user.avatarUrl || 'http://psdexport.com/storage/avatars/default.png'}}\"\n         class=\"img-circle img-responsive\">\n</div>";
+	module.exports = "<div>\r\n    <img ng-src=\"{{$ctrl.user.avatarUrl || 'http://psdexport.com/storage/avatars/default.png'}}\"\r\n         class=\"img-circle img-responsive\">\r\n</div>";
 
 /***/ },
 /* 19 */
@@ -561,7 +577,7 @@
 /* 22 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1> Error 404</h1>\n<h2>This Page is not found!</h2>\n<br>\n<h4><a ui-sref=\"common\">Go to the main page>></a></h4>";
+	module.exports = "<h1> Error 404</h1>\r\n<h2>This Page is not found!</h2>\r\n<br>\r\n<h4><a ui-sref=\"common\">Go to the main page>></a></h4>";
 
 /***/ },
 /* 23 */
