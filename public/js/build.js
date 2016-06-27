@@ -185,7 +185,7 @@
 	    }).state('contacts', {
 	        url: '/contacts',
 	        parent: 'common',
-	        template: '<contact-list contacts="contacts"></contact-list>',
+	        template: '<contact-list contacts="contacts" select="$parent.$ctrl.select"></contact-list>',
 	        requiresAuth: true,
 	        resolve: {
 	            contacts: ["Restangular", function contacts(Restangular) {
@@ -195,6 +195,8 @@
 	            }]
 	        },
 	        controller: ["$scope", "contacts", function controller($scope, contacts) {
+	            'ngInject';
+
 	            $scope.contacts = contacts;
 	        }]
 	    }).state('contact', {
@@ -282,6 +284,8 @@
 	function controller(AuthService, $state) {
 	    "ngInject";
 
+	    var _this = this;
+
 	    var user = AuthService.authUser;
 
 	    this.userName = user.userName;
@@ -290,6 +294,9 @@
 	    this.signOut = function () {
 	        AuthService.signOut();
 	        $state.go('login');
+	    };
+	    this.click = function () {
+	        console.log(_this.selectAll);
 	    };
 	}
 
@@ -302,7 +309,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"input-group\">\r\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\">\r\n            <span class=\"input-group-btn\">\r\n              <button class=\"btn btn-main\">\r\n                  <span class=\"glyphicon glyphicon-search\"></span>\r\n              </button>\r\n            </span>\r\n            </div><!-- /input-group -->\r\n\r\n            <span class=\"arrow caret\"></span>\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"[{title:'Mail', state:'mail'}, {title:'Contacts', state:'contacts'}]\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\">\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                        <span class=\"caret\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view></div>\r\n</div>\r\n\r\n";
+	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"input-group\">\r\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\">\r\n            <span class=\"input-group-btn\">\r\n              <button class=\"btn btn-main\">\r\n                  <span class=\"glyphicon glyphicon-search\"></span>\r\n              </button>\r\n            </span>\r\n            </div><!-- /input-group -->\r\n\r\n            <span class=\"arrow caret\"></span>\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"[{title:'Mail', state:'mail'}, {title:'Contacts', state:'contacts'}]\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.select\">\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view></div>\r\n</div>\r\n\r\n";
 
 /***/ },
 /* 7 */
@@ -382,6 +389,7 @@
 	exports.default = {
 	    template: _contactList2.default,
 	    bindings: {
+	        select: '=',
 	        contacts: '<'
 	    },
 	    controller: controller
@@ -391,7 +399,7 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<br>\r\n<div class=\"container-fluid\">\r\n    <ul class=\"list-unstyled\">\r\n        <li ng-repeat=\"contact in $ctrl.contacts\">\r\n            <ul class=\"list-inline\">\r\n                <li>\r\n                    <input type=\"checkbox\" class=\"mail-select\">\r\n                </li>\r\n                <li>\r\n                    <a ui-sref=\"contact({id: contact._id})\" >\r\n                        <img  class=\"img-circle\" ng-src={{contact.avatarUrl}} alt=\"Contact\">\r\n                    </a>\r\n                </li>\r\n                <li>\r\n                    <h3>{{contact.fullName}}</h3>\r\n                </li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+	module.exports = "<br>\r\n<div class=\"container-fluid\">\r\n    <ul class=\"list-unstyled\">\r\n        <li ng-repeat=\"contact in $ctrl.contacts\">\r\n            <ul class=\"list-inline\">\r\n                <li>\r\n                    <input type=\"checkbox\" class=\"mail-select\" ng-checked=\"$ctrl.select\">\r\n                </li>\r\n                <li>\r\n                    <a ui-sref=\"contact({id: contact._id})\" >\r\n                        <img  class=\"img-circle\" ng-src={{contact.avatarUrl}} alt=\"Contact\">\r\n                    </a>\r\n                </li>\r\n                <li>\r\n                    <h3>{{contact.fullName}}</h3>\r\n                </li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ },
 /* 13 */

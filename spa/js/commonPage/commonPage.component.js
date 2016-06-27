@@ -12,7 +12,10 @@ function controller (AuthService, $state) {
     this.signOut = () => {
         AuthService.signOut();
         $state.go('login');
-    }
+    };
+    this.click = () => {
+        console.log(this.selectAll);
+    };
 }
 
 export default {

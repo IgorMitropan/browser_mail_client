@@ -4,7 +4,7 @@
         <li ng-repeat="contact in $ctrl.contacts">
             <ul class="list-inline">
                 <li>
-                    <input type="checkbox" class="mail-select">
+                    <input type="checkbox" class="mail-select" ng-checked="$ctrl.select">
                 </li>
                 <li>
                     <a ui-sref="contact({id: contact._id})" >

@@ -10,6 +10,7 @@ function controller ($filter) {
 export default {
     template,
     bindings: {
+        select: '=',
         contacts: '<'
     },
     controller

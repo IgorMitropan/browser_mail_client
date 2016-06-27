@@ -53,7 +53,7 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
         .state('contacts', {
             url: '/contacts',
             parent: 'common',
-            template: '<contact-list contacts="contacts"></contact-list>',
+            template: '<contact-list contacts="contacts" select="$parent.$ctrl.select"></contact-list>',
             requiresAuth: true,
             resolve: {
                 contacts: (Restangular) => {
@@ -62,6 +62,7 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
                 }
             },
             controller: function ($scope, contacts) {
+                'ngInject';
                 $scope.contacts = contacts;
             }
         })
