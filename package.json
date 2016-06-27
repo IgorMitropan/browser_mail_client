@@ -17,6 +17,7 @@
   },
   "homepage": "http://igormitropan.github.io/browser_mail_client/public/",
   "devDependencies": {
+    "angular-messages": "^1.5.7",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.10.3",

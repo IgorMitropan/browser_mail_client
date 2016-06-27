@@ -16,7 +16,7 @@ import error404 from './error404/error404.component.js';
 
 import AuthService from './services/AuthService.js';
 
-const app = angular.module('mailApp', ['ui.router', 'restangular', 'ui.bootstrap']);
+const app = angular.module('mailApp', ['ui.router', 'restangular', 'ui.bootstrap', 'ngMessages']);
 
 app.config(router);
 app.config(function(RestangularProvider) {
