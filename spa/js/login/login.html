@@ -1,13 +1,24 @@
 <div>
-    <form class="form-signin login-form" ng-submit="$ctrl.signIn()" novalidate>
+    <form class="form-signin login-form" name="loginForm" ng-submit="$ctrl.signIn()" novalidate>
         <h2 class="form-signin-heading login-title">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus=""
-               ng-model="$ctrl.login">
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required=""
-               ng-model="$ctrl.password">
-        <br>
+        <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address"
+                   required="" autofocus=""
+                   ng-model="$ctrl.login">
+            <div ng-messages="loginForm.email.$error">
+                <div ng-message="email"  class="alert alert-danger">Enter a valid
+                    email.</div>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required=""
+                   ng-model="$ctrl.password" ng-minlength="2" autofocus="">
+
+            <div ng-show="loginForm.password.$error.minlength" class="alert alert-danger">Password is too short.</div>
+        </div>
+
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
 </div>
