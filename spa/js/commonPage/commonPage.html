@@ -46,6 +46,11 @@
                         <input type="checkbox" class="mail-select" ng-model="$ctrl.select">
                     </button>
                 </li>
+                <li>
+                    <button class="btn btn-control" title="Delete" ng-if="$ctrl.showDeleteBtn">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </li>
 
             </ul>
         </div><!-- controls -->
@@ -53,6 +58,6 @@
 </div>
 
 <div class="mail row">
-    <div ui-view></div>
+    <div ui-view>Loading...</div>
 </div>
 
