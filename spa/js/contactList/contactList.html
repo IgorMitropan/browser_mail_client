@@ -1,12 +1,20 @@
-<ul class="media-list tab-pane fade in active">
-    <li class="media" ng-repeat="contact in $ctrl.contacts">
-        <div class="media-left media-middle">
-            <a ui-sref="contact({id: contact._id})" >
-                <img  class="media-object img-thumbnail" ng-src={{contact.avatarUrl}} alt="Contact">
-            </a>
-        </div>
-        <div class="media-body">
-            <h3>{{contact.fullName}}</h3>
-        </div>
-    </li>
-</ul>
+<br>
+<div class="container-fluid">
+    <ul class="list-unstyled">
+        <li ng-repeat="contact in $ctrl.contacts">
+            <ul class="list-inline">
+                <li>
+                    <input type="checkbox" class="mail-select">
+                </li>
+                <li>
+                    <a ui-sref="contact({id: contact._id})" >
+                        <img  class="img-circle" ng-src={{contact.avatarUrl}} alt="Contact">
+                    </a>
+                </li>
+                <li>
+                    <h3>{{contact.fullName}}</h3>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
