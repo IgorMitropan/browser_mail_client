@@ -13,22 +13,6 @@ function controller (AuthService, $state, $scope) {
         AuthService.signOut();
         $state.go('login');
     };
-    this.showDeleteBtn = false;
-
-    $scope.$on('selected', (event) => {
-        $scope.$ctrl.showDeleteBtn = true;
-    });
-
-    $scope.$on('deselected', () => {
-        $scope.$ctrl.showDeleteBtn = false;
-        $scope.$ctrl.select = false;
-    });
-
-    $scope.$on('selectedAll', (event) => {
-        $scope.$ctrl.select = true;
-    });
-
-
 
 }
 

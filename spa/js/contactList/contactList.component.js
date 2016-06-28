@@ -8,8 +8,8 @@ function controller ($filter, $scope) {
 
     this.numberOfSelectedItems = 0;
 
-    $scope.$watch('$ctrl.select', (select) => {
-        $scope.$ctrl.contacts.forEach(item => item.selected = select);
+    $scope.$watch('$ctrl.selectAll', (selectAll) => {
+        $scope.$ctrl.contacts.forEach(item => item.selected = selectAll);
 
         $scope.$ctrl.change();
     });
@@ -18,15 +18,16 @@ function controller ($filter, $scope) {
         let newNumberOfSelectedItems = this.contacts.filter(item => {return item.selected}).length;
 
         if (newNumberOfSelectedItems && !this.numberOfSelectedItems) {
-            $scope.$emit('selected');
+            this.isAnyItemSelected = true;
         }
 
         if (!newNumberOfSelectedItems && this.numberOfSelectedItems) {
-            $scope.$emit('deselected');
+            this.selectAll = false;
+            this.isAnyItemSelected = false;
         }
 
         if (newNumberOfSelectedItems === this.contacts.length) {
-            $scope.$emit('selectedAll');
+            this.selectAll = true;
         }
 
         this.numberOfSelectedItems = newNumberOfSelectedItems;
@@ -36,8 +37,9 @@ function controller ($filter, $scope) {
 export default {
     template,
     bindings: {
-        select: '<',
-        contacts: '<'
+        contacts: '<',
+        selectAll: '=',
+        isAnyItemSelected: '='
     },
     controller
 }

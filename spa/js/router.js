@@ -53,7 +53,11 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
         .state('contacts', {
             url: '/contacts',
             parent: 'common',
-            template: '<contact-list contacts="contacts" select="$parent.$ctrl.select"></contact-list>',
+            template: `<contact-list
+                        contacts="contacts"
+                        select-all="$parent.$ctrl.selectAll"
+                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected">
+                        </contact-list>`,
             requiresAuth: true,
             resolve: {
                 contacts: (Restangular) => {

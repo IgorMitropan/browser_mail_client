@@ -43,11 +43,11 @@
                 </li>
                 <li>
                     <button class="btn btn-control" title="Select All">
-                        <input type="checkbox" class="mail-select" ng-model="$ctrl.select">
+                        <input type="checkbox" class="mail-select" ng-model="$ctrl.selectAll">
                     </button>
                 </li>
                 <li>
-                    <button class="btn btn-control" title="Delete" ng-if="$ctrl.showDeleteBtn">
+                    <button class="btn btn-control" title="Delete" ng-if="$ctrl.isAnyItemSelected">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </li>
