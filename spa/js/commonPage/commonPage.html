@@ -11,15 +11,14 @@
 
         <div class="search-bar col-sm-5">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
+                <input type="text" class="form-control" placeholder="Search for..."
+                       ng-model="$ctrl.search" ng-model-options="{ debounce: 500 }">
             <span class="input-group-btn">
               <button class="btn btn-main">
                   <span class="glyphicon glyphicon-search"></span>
               </button>
             </span>
             </div><!-- /input-group -->
-
-            <span class="arrow caret"></span>
 
         </div><!-- search-bar -->
 
@@ -31,7 +30,7 @@
 
     <div class="control-bar row">
         <div class="col-sm-2">
-            <drop-down items="[{title:'Mail', state:'mail'}, {title:'Contacts', state:'contacts'}]"></drop-down>
+            <drop-down items="$ctrl.commonStateChildren"></drop-down>
         </div><!-- menu -->
 
         <div class="controls col-sm-10">

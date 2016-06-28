@@ -185,7 +185,7 @@
 	    }).state('contacts', {
 	        url: '/contacts',
 	        parent: 'common',
-	        template: '<contact-list\n                        contacts="contacts"\n                        select-all="$parent.$ctrl.selectAll"\n                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected">\n                        </contact-list>',
+	        template: '<contact-list\n                        contacts="contacts"\n                        select-all="$parent.$ctrl.selectAll"\n                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"\n                        search="$parent.$ctrl.search">\n                        </contact-list>',
 	        requiresAuth: true,
 	        resolve: {
 	            contacts: ["Restangular", function contacts(Restangular) {
@@ -270,7 +270,7 @@
 
 	'use strict';
 
-	controller.$inject = ["AuthService", "$state", "$scope"];
+	controller.$inject = ["AuthService", "$state"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -281,11 +281,14 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function controller(AuthService, $state, $scope) {
+	var commonStateChildren = [{ title: 'Mail', state: 'mail' }, { title: 'Contacts', state: 'contacts' }];
+
+	function controller(AuthService, $state) {
 	    "ngInject";
 
-	    var user = AuthService.authUser;
+	    this.commonStateChildren = commonStateChildren;
 
+	    var user = AuthService.authUser;
 	    this.userName = user.userName;
 	    this.photoUrl = user.photo;
 
@@ -304,7 +307,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"input-group\">\r\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\">\r\n            <span class=\"input-group-btn\">\r\n              <button class=\"btn btn-main\">\r\n                  <span class=\"glyphicon glyphicon-search\"></span>\r\n              </button>\r\n            </span>\r\n            </div><!-- /input-group -->\r\n\r\n            <span class=\"arrow caret\"></span>\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"[{title:'Mail', state:'mail'}, {title:'Contacts', state:'contacts'}]\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
+	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"input-group\">\r\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                       ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n            <span class=\"input-group-btn\">\r\n              <button class=\"btn btn-main\">\r\n                  <span class=\"glyphicon glyphicon-search\"></span>\r\n              </button>\r\n            </span>\r\n            </div><!-- /input-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.commonStateChildren\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
 
 /***/ },
 /* 7 */
@@ -381,6 +384,7 @@
 	    var _this = this;
 
 	    this.contacts = $filter('orderBy')(this.contacts, 'fullName');
+	    var contacts = this.contacts;
 
 	    this.numberOfSelectedItems = 0;
 
@@ -390,6 +394,10 @@
 	        });
 
 	        $scope.$ctrl.change();
+	    });
+
+	    $scope.$watch('$ctrl.search', function (search) {
+	        $scope.$ctrl.contacts = $filter('filter')(contacts, search, false, 'fullName');
 	    });
 
 	    this.change = function () {
@@ -419,7 +427,8 @@
 	    bindings: {
 	        contacts: '<',
 	        selectAll: '=',
-	        isAnyItemSelected: '='
+	        isAnyItemSelected: '=',
+	        search: '<'
 	    },
 	    controller: controller
 	};

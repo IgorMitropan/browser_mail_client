@@ -56,7 +56,8 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
             template: `<contact-list
                         contacts="contacts"
                         select-all="$parent.$ctrl.selectAll"
-                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected">
+                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"
+                        search="$parent.$ctrl.search">
                         </contact-list>`,
             requiresAuth: true,
             resolve: {

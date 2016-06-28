@@ -5,6 +5,7 @@ function controller ($filter, $scope) {
     "ngInject";
     
     this.contacts = $filter('orderBy')(this.contacts, 'fullName');
+    let contacts = this.contacts;
 
     this.numberOfSelectedItems = 0;
 
@@ -12,6 +13,10 @@ function controller ($filter, $scope) {
         $scope.$ctrl.contacts.forEach(item => item.selected = selectAll);
 
         $scope.$ctrl.change();
+    });
+
+    $scope.$watch('$ctrl.search', (search) => {
+        $scope.$ctrl.contacts = $filter('filter')(contacts, search, false, 'fullName');
     });
 
     this.change = () => {
@@ -39,7 +44,8 @@ export default {
     bindings: {
         contacts: '<',
         selectAll: '=',
-        isAnyItemSelected: '='
+        isAnyItemSelected: '=',
+        search: '<'
     },
     controller
 }
