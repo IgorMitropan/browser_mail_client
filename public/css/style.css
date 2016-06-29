@@ -104,6 +104,12 @@ input.mail-select {
     margin-top: 10px;
     font-size: 13px;
 }
+
+.inbox-sections li:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}
+
 .inbox-sections .active {
     color: #d14836;
     font-weight: bold;

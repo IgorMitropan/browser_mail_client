@@ -3,7 +3,7 @@ import template from './dropDown.html';
 function controller ($state) {
     "ngInject";
 
-    this.choice = this.items[0];
+    this.choice = this.choice || this.items[0];
 
     this.toggleDropdown = ($event) => {
         $event.preventDefault();
@@ -25,7 +25,8 @@ function controller ($state) {
 export default {
     template,
     bindings: {
-        items: '<'
+        items: '<',
+        choice: '='
     },
     controller
 }

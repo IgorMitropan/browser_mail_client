@@ -110,6 +110,18 @@
 	    RestangularProvider.setBaseUrl('https://test-api.javascript.ru/v1/imytropan');
 	}]);
 
+	app.run(["$rootScope", "$transitions", function ($rootScope, $transitions) {
+	    "ngInject";
+
+	    $transitions.onSuccess({ to: function to(state) {
+	            return state.requiresAuth;
+	        } }, ["$state", function ($state) {
+	        "ngInject";
+
+	        $rootScope.$broadcast('stateWasChanged', $state.current);
+	    }]);
+	}]);
+
 	app.component('login', _loginComponent2.default);
 	app.component('commonPage', _commonPageComponent2.default);
 	app.component('mailBoxes', _mailBoxesComponent2.default);
@@ -175,7 +187,7 @@
 	        url: '/mail',
 	        parent: 'common',
 	        abstract: 'letters',
-	        template: '<mail-boxes \n                        mailboxes="mailboxes"\n                        select-all="$parent.$ctrl.selectAll"\n                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"\n                        search="$parent.$ctrl.search">\n                        </mail-boxes>',
+	        template: '<mail-boxes \n                        mailboxes="mailboxes"\n                        selected-mailbox="$parent.$ctrl.selectedMailbox"\n                        select-all="$parent.$ctrl.selectAll"\n                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"\n                        search="$parent.$ctrl.search">\n                        </mail-boxes>',
 	        requiresAuth: true,
 	        resolve: {
 	            mailboxes: ["Restangular", function mailboxes(Restangular) {
@@ -291,7 +303,7 @@
 
 	'use strict';
 
-	controller.$inject = ["AuthService", "$state"];
+	controller.$inject = ["AuthService", "$state", "$scope"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -302,20 +314,48 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var commonStateChildren = [{ title: 'Mail', state: 'mail' }, { title: 'Contacts', state: 'contacts' }];
+	var COMMON_STATE_CHILDREN = [{ title: 'Mail', state: 'mail' }, { title: 'Contacts', state: 'contacts' }];
+	var SELECTED_COMMON_STATE_CHILD_INDEX = 0;
+	var SELECTED_MAILBOX_INDEX = 0;
 
-	function controller(AuthService, $state) {
+	var selectedStateChild = COMMON_STATE_CHILDREN[SELECTED_COMMON_STATE_CHILD_INDEX];
+	var selectedMailbox = SELECTED_MAILBOX_INDEX;
+
+	function controller(AuthService, $state, $scope) {
 	    "ngInject";
 
-	    this.commonStateChildren = commonStateChildren;
+	    var _this = this;
+
+	    this.stateChildren = COMMON_STATE_CHILDREN;
+	    this.selectedStateChild = selectedStateChild;
+	    this.selectedMailbox = selectedMailbox;
 
 	    var user = AuthService.authUser;
 	    this.userName = user.userName;
 	    this.photoUrl = user.photo;
 
+	    $scope.$on('stateWasChanged', function (event, state) {
+	        if (state.name === 'contact') {
+	            $scope.$ctrl.isListShown = false;
+	            $scope.$ctrl.isAnyItemSelected = true;
+	        } else {
+	            $scope.$ctrl.isListShown = true;
+	            $scope.$ctrl.isAnyItemSelected = false;
+	        }
+
+	        $scope.$ctrl.search = '';
+	        $scope.$ctrl.selectAll = false;
+	    });
+
 	    this.signOut = function () {
+	        selectedMailbox = SELECTED_MAILBOX_INDEX;
 	        AuthService.signOut();
 	        $state.go('login');
+	    };
+	    this.refresh = function () {
+	        selectedStateChild = _this.chosenStateChild;
+	        selectedMailbox = _this.selectedMailbox;
+	        $state.reload();
 	    };
 	}
 
@@ -328,7 +368,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"form-group has-feedback\">\r\n                    <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                           ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n                    <span class=\"glyphicon glyphicon-search form-control-feedback\" aria-hidden=\"true\"></span>\r\n            </div><!-- /form-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.commonStateChildren\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\" ng-change=\"$ctrl.setSelection()\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
+	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"form-group has-feedback\">\r\n                    <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                           ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n                    <span class=\"glyphicon glyphicon-search form-control-feedback\" aria-hidden=\"true\"></span>\r\n            </div><!-- /form-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.stateChildren\" choice=\"$ctrl.selectedStateChild\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\" ng-click=\"$ctrl.refresh()\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\" ng-if=\"$ctrl.isListShown\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\" ng-change=\"$ctrl.setSelection()\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
 
 /***/ },
 /* 7 */
@@ -352,10 +392,16 @@
 
 	    var _this = this;
 
-	    this.mailboxId = this.mailboxes[0]._id;
+	    this.mailboxId = this.mailboxes[this.selectedMailbox]._id;
 
 	    this.choseMailbox = function (mailbox) {
 	        _this.mailboxId = mailbox._id;
+
+	        for (var i = 0; i < _this.mailboxes.length; i++) {
+	            if (_this.mailboxes[i]._id === _this.mailboxId) {
+	                _this.selectedMailbox = i;
+	            }
+	        }
 	    };
 	}
 
@@ -363,6 +409,7 @@
 	    template: _mailBoxes2.default,
 	    bindings: {
 	        mailboxes: '<',
+	        selectedMailbox: '=',
 	        selectAll: '=',
 	        isAnyItemSelected: '=',
 	        search: '<'
@@ -404,6 +451,7 @@
 	    $scope.$watch('$ctrl.mailboxId', function (mailboxId) {
 	        $scope.$ctrl.letters = $filter('filter')(letters, mailboxId, true, '_id');
 	        lettersforSearch = $scope.$ctrl.letters;
+	        _this.selectAll = false;
 	    });
 
 	    this.numberOfSelectedItems = 0;
@@ -598,7 +646,7 @@
 
 	    var _this = this;
 
-	    this.choice = this.items[0];
+	    this.choice = this.choice || this.items[0];
 
 	    this.toggleDropdown = function ($event) {
 	        $event.preventDefault();
@@ -619,7 +667,8 @@
 	exports.default = {
 	    template: _dropDown2.default,
 	    bindings: {
-	        items: '<'
+	        items: '<',
+	        choice: '='
 	    },
 	    controller: controller
 	};

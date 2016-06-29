@@ -43,6 +43,7 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
             abstract: 'letters',
             template: `<mail-boxes 
                         mailboxes="mailboxes"
+                        selected-mailbox="$parent.$ctrl.selectedMailbox"
                         select-all="$parent.$ctrl.selectAll"
                         is-any-item-selected="$parent.$ctrl.isAnyItemSelected"
                         search="$parent.$ctrl.search">

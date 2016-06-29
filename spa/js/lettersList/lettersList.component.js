@@ -10,6 +10,7 @@ function controller($filter, $scope) {
     $scope.$watch('$ctrl.mailboxId', (mailboxId) => {
         $scope.$ctrl.letters = $filter('filter')(letters, mailboxId, true, '_id');
         lettersforSearch = $scope.$ctrl.letters;
+        this.selectAll = false;
     });
 
     this.numberOfSelectedItems = 0;

@@ -26,18 +26,18 @@
 
     <div class="control-bar row">
         <div class="col-sm-2">
-            <drop-down items="$ctrl.commonStateChildren"></drop-down>
+            <drop-down items="$ctrl.stateChildren" choice="$ctrl.selectedStateChild"></drop-down>
         </div><!-- menu -->
 
         <div class="controls col-sm-10">
             <ul class="control-list list-inline">
                 <li>
-                    <button class="btn btn-control" title="Refresh">
+                    <button class="btn btn-control" title="Refresh" ng-click="$ctrl.refresh()">
                         <span class="glyphicon glyphicon-repeat"></span>
                     </button>
                 </li>
                 <li>
-                    <button class="btn btn-control" title="Select All">
+                    <button class="btn btn-control" title="Select All" ng-if="$ctrl.isListShown">
                         <input type="checkbox" class="mail-select" ng-model="$ctrl.selectAll" ng-change="$ctrl.setSelection()">
                     </button>
                 </li>
