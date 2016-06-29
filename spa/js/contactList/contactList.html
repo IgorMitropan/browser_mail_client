@@ -1,20 +1,21 @@
-<br>
-<div class="container-fluid">
-    <ul class="list-unstyled">
-        <li ng-repeat="contact in $ctrl.contacts">
-            <ul class="list-inline">
-                <li>
-                    <input type="checkbox" class="mail-select" ng-model="contact.selected" ng-change="$ctrl.change()">
-                </li>
-                <li>
-                    <a ui-sref="contact({id: contact._id})" >
-                        <img  class="img-circle" ng-src={{contact.avatarUrl}} alt="Contact">
-                    </a>
-                </li>
-                <li>
-                    <h3>{{contact.fullName}}</h3>
-                </li>
-            </ul>
-        </li>
-    </ul>
+<div class="container">
+    <div class="col-sm-8">
+        <ul class="list-unstyled">
+            <li ng-repeat="contact in $ctrl.contacts">
+                <ul class="list-inline">
+                    <li>
+                        <input type="checkbox" class="mail-select" ng-model="contact.selected" ng-change="$ctrl.change()">
+                    </li>
+                    <li>
+                        <a ui-sref="contact({id: contact._id})" >
+                            <img  class="img-circle" ng-src={{contact.avatarUrl}} alt="Contact">
+                        </a>
+                    </li>
+                    <li>
+                        <h3>{{contact.fullName}}</h3>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>

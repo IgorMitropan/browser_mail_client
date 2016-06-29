@@ -6,7 +6,7 @@ import router from './router.js';
 import login from './login/login.component.js';
 import commonPage from './commonPage/commonPage.component.js';
 import mailBoxes from './mailBoxes/mailBoxes.component.js';
-import inboxMail from './inboxMail/inboxMail.component.js';
+import lettersList from './lettersList/lettersList.component';
 import contactList from './contactList/contactList.component.js';
 import contactDetails from './contactDetails/contactDetails.component.js';
 import dropDown from './dropDown/dropDown.component.js';
@@ -26,7 +26,7 @@ app.config(function(RestangularProvider) {
 app.component('login', login);
 app.component('commonPage', commonPage);
 app.component('mailBoxes', mailBoxes);
-app.component('inboxMail', inboxMail);
+app.component('lettersList', lettersList);
 app.component('contactList', contactList);
 app.component('contactDetails', contactDetails);
 app.component('dropDown', dropDown);

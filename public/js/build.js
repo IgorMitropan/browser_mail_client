@@ -69,9 +69,9 @@
 
 	var _mailBoxesComponent2 = _interopRequireDefault(_mailBoxesComponent);
 
-	var _inboxMailComponent = __webpack_require__(9);
+	var _lettersList = __webpack_require__(9);
 
-	var _inboxMailComponent2 = _interopRequireDefault(_inboxMailComponent);
+	var _lettersList2 = _interopRequireDefault(_lettersList);
 
 	var _contactListComponent = __webpack_require__(11);
 
@@ -113,7 +113,7 @@
 	app.component('login', _loginComponent2.default);
 	app.component('commonPage', _commonPageComponent2.default);
 	app.component('mailBoxes', _mailBoxesComponent2.default);
-	app.component('inboxMail', _inboxMailComponent2.default);
+	app.component('lettersList', _lettersList2.default);
 	app.component('contactList', _contactListComponent2.default);
 	app.component('contactDetails', _contactDetailsComponent2.default);
 	app.component('dropDown', _dropDownComponent2.default);
@@ -137,8 +137,8 @@
 	    "ngInject";
 
 	    $urlRouterProvider.when('', '/login');
-	    $urlRouterProvider.when('/common', '/common/mail/inbox');
-	    $urlRouterProvider.when('/common/mail', '/common/mail/inbox');
+	    $urlRouterProvider.when('/common', '/common/mail/letters');
+	    $urlRouterProvider.when('/common/mail', '/common/mail/letters');
 	    $urlRouterProvider.otherwise('404');
 
 	    $transitionsProvider.onBefore({
@@ -174,14 +174,35 @@
 	    }).state('mail', {
 	        url: '/mail',
 	        parent: 'common',
-	        abstract: 'inbox',
-	        template: '<mail-boxes></mail-boxes>',
-	        requiresAuth: true
-	    }).state('inbox', {
-	        url: '/inbox',
+	        abstract: 'letters',
+	        template: '<mail-boxes \n                        mailboxes="mailboxes"\n                        select-all="$parent.$ctrl.selectAll"\n                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"\n                        search="$parent.$ctrl.search">\n                        </mail-boxes>',
+	        requiresAuth: true,
+	        resolve: {
+	            mailboxes: ["Restangular", function mailboxes(Restangular) {
+	                "ngInject";
+
+	                return Restangular.all('mailboxes').getList();
+	            }]
+	        },
+	        controller: ["$scope", "mailboxes", function controller($scope, mailboxes) {
+	            $scope.mailboxes = mailboxes;
+	        }]
+
+	    }).state('letters', {
+	        url: '/letters',
 	        parent: 'mail',
-	        template: '<inbox-mail></inbox-mail>',
-	        requiresAuth: true
+	        template: '<letters-list \n                        letters="letters" \n                        mailbox-id="$parent.$ctrl.mailboxId"\n                        select-all="$parent.$ctrl.selectAll"\n                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"\n                        search="$parent.$ctrl.search">\n                        </letters-list>',
+	        requiresAuth: true,
+	        resolve: {
+	            letters: ["Restangular", function letters(Restangular) {
+	                "ngInject";
+
+	                return Restangular.all('letters').getList();
+	            }]
+	        },
+	        controller: ["$scope", "letters", function controller($scope, letters) {
+	            $scope.letters = letters;
+	        }]
 	    }).state('contacts', {
 	        url: '/contacts',
 	        parent: 'common',
@@ -307,7 +328,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"input-group\">\r\n                <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                       ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n            <span class=\"input-group-btn\">\r\n              <button class=\"btn btn-main\">\r\n                  <span class=\"glyphicon glyphicon-search\"></span>\r\n              </button>\r\n            </span>\r\n            </div><!-- /input-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.commonStateChildren\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
+	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"form-group has-feedback\">\r\n                    <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                           ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n                    <span class=\"glyphicon glyphicon-search form-control-feedback\" aria-hidden=\"true\"></span>\r\n            </div><!-- /form-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.commonStateChildren\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\" ng-change=\"$ctrl.setSelection()\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
 
 /***/ },
 /* 7 */
@@ -315,6 +336,7 @@
 
 	'use strict';
 
+	controller.$inject = ["$scope"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -325,15 +347,34 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function controller($scope) {
+	    "ngInject";
+
+	    var _this = this;
+
+	    this.mailboxId = this.mailboxes[0]._id;
+
+	    this.choseMailbox = function (mailbox) {
+	        _this.mailboxId = mailbox._id;
+	    };
+	}
+
 	exports.default = {
-	    template: _mailBoxes2.default
+	    template: _mailBoxes2.default,
+	    bindings: {
+	        mailboxes: '<',
+	        selectAll: '=',
+	        isAnyItemSelected: '=',
+	        search: '<'
+	    },
+	    controller: controller
 	};
 
 /***/ },
 /* 8 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"sidebar col-sm-2\">\r\n    <button class=\"compose btn btn-danger\">\r\n        Compose\r\n    </button>\r\n\r\n    <ul class=\"inbox-sections list-unstyled\">\r\n        <li class=\"active\">\r\n            Inbox (100)\r\n        </li>\r\n        <li>Sent Mail</li>\r\n        <li class=\"pending\">\r\n            Drafts (7)\r\n        </li>\r\n        <li>All Mail</li>\r\n        <li class=\"pending\">\r\n            Spam (1)\r\n        </li>\r\n    </ul>\r\n</div><!-- sidebar -->\r\n\r\n<div ui-view></div>";
+	module.exports = "<div class=\"sidebar col-sm-2\">\r\n    <button class=\"compose btn btn-danger\">\r\n        Compose\r\n    </button>\r\n\r\n    <ul class=\"inbox-sections list-unstyled\">\r\n        <li class=\"pending\" ng-repeat=\"mailbox in $ctrl.mailboxes\"\r\n            ng-class=\"{'active': mailbox._id === $ctrl.mailboxId}\" ng-click=\"$ctrl.choseMailbox(mailbox)\">\r\n            {{mailbox.title}}\r\n        </li>\r\n    </ul>\r\n</div><!-- sidebar -->\r\n\r\n<div ui-view></div>";
 
 /***/ },
 /* 9 */
@@ -341,25 +382,83 @@
 
 	'use strict';
 
+	controller.$inject = ["$filter", "$scope"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	var _inboxMail = __webpack_require__(10);
+	var _lettersList = __webpack_require__(10);
 
-	var _inboxMail2 = _interopRequireDefault(_inboxMail);
+	var _lettersList2 = _interopRequireDefault(_lettersList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function controller($filter, $scope) {
+	    "ngInject";
+
+	    var _this = this;
+
+	    var letters = this.letters;
+	    var lettersforSearch = this.letters;
+
+	    $scope.$watch('$ctrl.mailboxId', function (mailboxId) {
+	        $scope.$ctrl.letters = $filter('filter')(letters, mailboxId, true, '_id');
+	        lettersforSearch = $scope.$ctrl.letters;
+	    });
+
+	    this.numberOfSelectedItems = 0;
+
+	    $scope.$watch('$ctrl.selectAll', function (selectAll) {
+	        $scope.$ctrl.letters.forEach(function (item) {
+	            return item.selected = selectAll;
+	        });
+
+	        $scope.$ctrl.change();
+	    });
+
+	    $scope.$watch('$ctrl.search', function (search) {
+	        $scope.$ctrl.letters = $filter('filter')(lettersforSearch, search);
+	    });
+
+	    this.change = function () {
+	        var newNumberOfSelectedItems = _this.letters.filter(function (item) {
+	            return item.selected;
+	        }).length;
+
+	        if (newNumberOfSelectedItems && !_this.numberOfSelectedItems) {
+	            _this.isAnyItemSelected = true;
+	        }
+
+	        if (!newNumberOfSelectedItems && _this.numberOfSelectedItems) {
+	            _this.selectAll = false;
+	            _this.isAnyItemSelected = false;
+	        }
+
+	        if (newNumberOfSelectedItems === _this.letters.length) {
+	            _this.selectAll = true;
+	        }
+
+	        _this.numberOfSelectedItems = newNumberOfSelectedItems;
+	    };
+	}
+
 	exports.default = {
-	    template: _inboxMail2.default
+	    template: _lettersList2.default,
+	    bindings: {
+	        letters: '<',
+	        mailboxId: '<',
+	        selectAll: '=',
+	        isAnyItemSelected: '=',
+	        search: '<'
+	    },
+	    controller: controller
 	};
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"inbox col-sm-10\">\r\n    <ul class=\"list-unstyled\">\r\n        <li class=\"email-item row unread\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n                <span class=\"people-names\">Nizar Khalife</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n\r\n        <li class=\"email-item row\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n\r\n        <li class=\"email-item row unread\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n        <li class=\"email-item row\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n\r\n        <li class=\"email-item row\">\r\n            <div class=\"people col-sm-3\">\r\n                <ul class=\"mail-icons list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\">\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-star-empty\"></span>\r\n                    </li>\r\n                    <li>\r\n                        <span class=\"glyphicon glyphicon-cutlery\"></span>\r\n                    </li>\r\n                </ul>\r\n\r\n<span class=\"people-names\">\r\nNizar Khalife\r\n</span>\r\n            </div><!-- people -->\r\n\r\n            <div class=\"message col-sm-7\">\r\n                <div class=\"clipper\">\r\n                    <h3>About your pizza</h3>\r\n                    -\r\n                    <p>We can't deliver your pizza on time. We will be about 50 minutes late. Is that okay? Let us\r\n                        know because there are a lot of hungry people in the world.</p>\r\n                </div>\r\n            </div><!-- message -->\r\n\r\n            <div class=\"date col-sm-2\">\r\n                <date class=\"pull-right\">11:27 a.m.</date>\r\n            </div><!-- date -->\r\n        </li>\r\n    </ul>\r\n</div><!-- inbox -->\r\n</div><!-- mail -->";
+	module.exports = "<div class=\"inbox col-sm-10\">\r\n        <ul class=\"list-unstyled\">\r\n            <li class=\"email-item row unread\" ng-repeat=\"letter in $ctrl.letters\">\r\n                <div class=\"people col-sm-3\">\r\n                    <ul class=\"mail-icons list-inline\">\r\n                        <li>\r\n                            <input type=\"checkbox\" class=\"mail-select\" ng-model=\"letter.selected\" ng-change=\"$ctrl.change()\">\r\n                        </li>\r\n                    </ul>\r\n    \r\n    <span class=\"people-names pending\">\r\n {{letter.to}}\r\n </span>\r\n                </div><!-- people -->\r\n    \r\n                <div class=\"message\">\r\n                    <div class=\"clipper\">\r\n                        <h3>{{letter.subject}}</h3>\r\n                        -\r\n                        <p>{{letter.body}}</p>\r\n                    </div>\r\n                </div><!-- message -->\r\n            </li>\r\n        </ul>\r\n    </div><!-- inbox -->\r\n</div><!-- mail --> ";
 
 /***/ },
 /* 11 */
@@ -437,7 +536,7 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<br>\r\n<div class=\"container-fluid\">\r\n    <ul class=\"list-unstyled\">\r\n        <li ng-repeat=\"contact in $ctrl.contacts\">\r\n            <ul class=\"list-inline\">\r\n                <li>\r\n                    <input type=\"checkbox\" class=\"mail-select\" ng-model=\"contact.selected\" ng-change=\"$ctrl.change()\">\r\n                </li>\r\n                <li>\r\n                    <a ui-sref=\"contact({id: contact._id})\" >\r\n                        <img  class=\"img-circle\" ng-src={{contact.avatarUrl}} alt=\"Contact\">\r\n                    </a>\r\n                </li>\r\n                <li>\r\n                    <h3>{{contact.fullName}}</h3>\r\n                </li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+	module.exports = "<div class=\"container\">\r\n    <div class=\"col-sm-8\">\r\n        <ul class=\"list-unstyled\">\r\n            <li ng-repeat=\"contact in $ctrl.contacts\">\r\n                <ul class=\"list-inline\">\r\n                    <li>\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"contact.selected\" ng-change=\"$ctrl.change()\">\r\n                    </li>\r\n                    <li>\r\n                        <a ui-sref=\"contact({id: contact._id})\" >\r\n                            <img  class=\"img-circle\" ng-src={{contact.avatarUrl}} alt=\"Contact\">\r\n                        </a>\r\n                    </li>\r\n                    <li>\r\n                        <h3>{{contact.fullName}}</h3>\r\n                    </li>\r\n                </ul>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</div>\r\n";
 
 /***/ },
 /* 13 */

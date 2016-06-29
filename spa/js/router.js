@@ -4,8 +4,8 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
     "ngInject";
 
     $urlRouterProvider.when('', '/login');
-    $urlRouterProvider.when('/common', '/common/mail/inbox');
-    $urlRouterProvider.when('/common/mail', '/common/mail/inbox');
+    $urlRouterProvider.when('/common', '/common/mail/letters');
+    $urlRouterProvider.when('/common/mail', '/common/mail/letters');
     $urlRouterProvider.otherwise('404');
 
     $transitionsProvider.onBefore({
@@ -40,15 +40,48 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
         .state('mail', {
             url: '/mail',
             parent: 'common',
-            abstract: 'inbox',
-            template: '<mail-boxes></mail-boxes>',
-            requiresAuth: true
+            abstract: 'letters',
+            template: `<mail-boxes 
+                        mailboxes="mailboxes"
+                        select-all="$parent.$ctrl.selectAll"
+                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"
+                        search="$parent.$ctrl.search">
+                        </mail-boxes>`,
+            requiresAuth: true,
+            resolve: {
+                mailboxes: (Restangular) => {
+                    "ngInject";
+
+                    return Restangular.all('mailboxes').getList();
+                }
+            },
+            controller: function ($scope, mailboxes) {
+                $scope.mailboxes = mailboxes;
+            }
+
         })
-        .state('inbox', {
-            url: '/inbox',
+        .state('letters', {
+            url: '/letters',
             parent: 'mail',
-            template: '<inbox-mail></inbox-mail>',
-            requiresAuth: true
+            template: `<letters-list 
+                        letters="letters" 
+                        mailbox-id="$parent.$ctrl.mailboxId"
+                        select-all="$parent.$ctrl.selectAll"
+                        is-any-item-selected="$parent.$ctrl.isAnyItemSelected"
+                        search="$parent.$ctrl.search">
+                        </letters-list>`,
+            requiresAuth: true,
+            resolve: {
+                letters: (Restangular) => {
+                    "ngInject";
+
+                    return Restangular.all('letters').getList();
+                }
+            },
+            controller: function ($scope, letters) {
+                $scope.letters = letters;
+
+            }
         })
         .state('contacts', {
             url: '/contacts',

@@ -10,15 +10,11 @@
         </div><!-- profile -->
 
         <div class="search-bar col-sm-5">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for..."
-                       ng-model="$ctrl.search" ng-model-options="{ debounce: 500 }">
-            <span class="input-group-btn">
-              <button class="btn btn-main">
-                  <span class="glyphicon glyphicon-search"></span>
-              </button>
-            </span>
-            </div><!-- /input-group -->
+            <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Search for..."
+                           ng-model="$ctrl.search" ng-model-options="{ debounce: 500 }">
+                    <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+            </div><!-- /form-group -->
 
         </div><!-- search-bar -->
 
@@ -42,7 +38,7 @@
                 </li>
                 <li>
                     <button class="btn btn-control" title="Select All">
-                        <input type="checkbox" class="mail-select" ng-model="$ctrl.selectAll">
+                        <input type="checkbox" class="mail-select" ng-model="$ctrl.selectAll" ng-change="$ctrl.setSelection()">
                     </button>
                 </li>
                 <li>
