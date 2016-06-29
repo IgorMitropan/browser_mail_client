@@ -2,7 +2,8 @@
 
 import {DB} from '../defaultConsts.js';
 
-export default class AuthService {
+export default class RestoreDBService {
+    /* @ngInject*/
 
     constructor(Restangular) {
         "ngInject";

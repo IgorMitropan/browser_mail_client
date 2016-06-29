@@ -15,6 +15,8 @@ import mailto from './mailto/mailto.component.js';
 import error404 from './error404/error404.component.js';
 
 import AuthService from './services/AuthService.js';
+import RestoreDBService from './services/RestoreDBService.js';
+
 
 const app = angular.module('mailApp', ['ui.router', 'restangular', 'ui.bootstrap', 'ngMessages']);
 
@@ -44,3 +46,4 @@ app.component('mailto', mailto);
 app.component('error404', error404);
 
 app.service('AuthService', AuthService);
+app.service('RestoreDBService', RestoreDBService);

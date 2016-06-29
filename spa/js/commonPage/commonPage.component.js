@@ -5,7 +5,7 @@ import {COMMON_STATE_CHILDREN, SELECTED_COMMON_STATE_CHILD_INDEX, SELECTED_MAILB
 let selectedStateChild = COMMON_STATE_CHILDREN[SELECTED_COMMON_STATE_CHILD_INDEX];
 let selectedMailbox = SELECTED_MAILBOX_INDEX;
 
-function controller (AuthService, $state, $scope) {
+function controller ($scope, $state, AuthService, RestoreDBService) {
     "ngInject";
 
     this.stateChildren = COMMON_STATE_CHILDREN;
@@ -39,6 +39,8 @@ function controller (AuthService, $state, $scope) {
         selectedMailbox = this.selectedMailbox;
         $state.reload();
     };
+
+    this.restoreTestDB = RestoreDBService.restoreDB;
 }
 
 export default {

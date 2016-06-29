@@ -186,4 +186,5 @@ input.mail-select {
 }
 .logout:hover {
     font-size: 120%;
+    cursor: pointer;
 }
