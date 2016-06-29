@@ -3,26 +3,29 @@
 import {DB} from '../defaultConsts.js';
 
 export default class AuthService {
+
     constructor(Restangular) {
         "ngInject";
+
         this._DB = DB;
+        this._Restangular = Restangular;
     }
 
     get DB () {
         return this._DB;
     }
     
-    get users() {
-        return this._DB.users;
-    }
-
-    get letters() {
-        return this._DB.letters;
-    }
-    
     restoreDB() {
+        let DB = this.DB;
+
+        this._Restangular.all('users').then(users => {
+            users.remove();
+            users.post(DB.users);
+        });
+
+        this._Restangular.all('letters').then(users => {
+            users.remove();
+            users.post(DB.letters);
+        })
     }
-    
-    
-    
 }
