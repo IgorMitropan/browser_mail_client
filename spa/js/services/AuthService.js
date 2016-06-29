@@ -1,10 +1,6 @@
 'use strict';
-const userProfile = {
-    userName: 'John Smith',
-    photo: 'img/profile.jpg',
-    login: '',
-    password: ''
-};
+
+import {USER_PROFILE} from '../defaultConsts.js';
 
 export default class AuthService {
     constructor() {
@@ -25,11 +21,11 @@ export default class AuthService {
     }
 
     signIn (login, password) {
-        this._isAuthorized = (login === userProfile.login && password === userProfile.password);
+        this._isAuthorized = (login === USER_PROFILE.login && password === USER_PROFILE.password);
         
         this._authUser = {
-            userName: userProfile.userName,
-            photo: userProfile.photo
+            userName: USER_PROFILE.userName,
+            photo: USER_PROFILE.photo
         }
     }
 

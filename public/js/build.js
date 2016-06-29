@@ -312,21 +312,19 @@
 
 	var _commonPage2 = _interopRequireDefault(_commonPage);
 
+	var _defaultConsts = __webpack_require__(25);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var COMMON_STATE_CHILDREN = [{ title: 'Mail', state: 'mail' }, { title: 'Contacts', state: 'contacts' }];
-	var SELECTED_COMMON_STATE_CHILD_INDEX = 0;
-	var SELECTED_MAILBOX_INDEX = 0;
-
-	var selectedStateChild = COMMON_STATE_CHILDREN[SELECTED_COMMON_STATE_CHILD_INDEX];
-	var selectedMailbox = SELECTED_MAILBOX_INDEX;
+	var selectedStateChild = _defaultConsts.COMMON_STATE_CHILDREN[_defaultConsts.SELECTED_COMMON_STATE_CHILD_INDEX];
+	var selectedMailbox = _defaultConsts.SELECTED_MAILBOX_INDEX;
 
 	function controller(AuthService, $state, $scope) {
 	    "ngInject";
 
 	    var _this = this;
 
-	    this.stateChildren = COMMON_STATE_CHILDREN;
+	    this.stateChildren = _defaultConsts.COMMON_STATE_CHILDREN;
 	    this.selectedStateChild = selectedStateChild;
 	    this.selectedMailbox = selectedMailbox;
 
@@ -348,12 +346,12 @@
 	    });
 
 	    this.signOut = function () {
-	        selectedMailbox = SELECTED_MAILBOX_INDEX;
+	        selectedMailbox = _defaultConsts.SELECTED_MAILBOX_INDEX;
 	        AuthService.signOut();
 	        $state.go('login');
 	    };
 	    this.refresh = function () {
-	        selectedStateChild = _this.chosenStateChild;
+	        selectedStateChild = _this.selectedStateChild;
 	        selectedMailbox = _this.selectedMailbox;
 	        $state.reload();
 	    };
@@ -775,7 +773,7 @@
 
 /***/ },
 /* 23 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -785,14 +783,9 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var _defaultConsts = __webpack_require__(25);
 
-	var userProfile = {
-	    userName: 'John Smith',
-	    photo: 'img/profile.jpg',
-	    login: '',
-	    password: ''
-	};
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AuthService = function () {
 	    function AuthService() {
@@ -809,11 +802,11 @@
 	    _createClass(AuthService, [{
 	        key: 'signIn',
 	        value: function signIn(login, password) {
-	            this._isAuthorized = login === userProfile.login && password === userProfile.password;
+	            this._isAuthorized = login === _defaultConsts.USER_PROFILE.login && password === _defaultConsts.USER_PROFILE.password;
 
 	            this._authUser = {
-	                userName: userProfile.userName,
-	                photo: userProfile.photo
+	                userName: _defaultConsts.USER_PROFILE.userName,
+	                photo: _defaultConsts.USER_PROFILE.photo
 	            };
 	        }
 	    }, {
@@ -842,6 +835,80 @@
 	}();
 
 	exports.default = AuthService;
+
+/***/ },
+/* 24 */,
+/* 25 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var COMMON_STATE_CHILDREN = exports.COMMON_STATE_CHILDREN = [{ title: 'Mail', state: 'mail' }, { title: 'Contacts', state: 'contacts' }];
+	var SELECTED_COMMON_STATE_CHILD_INDEX = exports.SELECTED_COMMON_STATE_CHILD_INDEX = 0;
+	var SELECTED_MAILBOX_INDEX = exports.SELECTED_MAILBOX_INDEX = 0;
+
+	var USER_PROFILE = exports.USER_PROFILE = {
+	    userName: 'John Smith',
+	    photo: 'img/profile.jpg',
+	    login: '',
+	    password: ''
+	};
+
+	var DB = exports.DB = {
+	    "letters": [{
+	        "mailbox": "577106a66baa8d7d1bfe5dc6",
+	        "subject": "job",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test@mail.com" }, { "mailbox": "577106a66baa8d7d1bfe5dc6",
+	        "subject": "study",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test2@mail.com" }, { "mailbox": "577106c16baa8d7d1bfe5dc7",
+	        "subject": "pizza",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test3@mail.com" }, { "mailbox": "577106c16baa8d7d1bfe5dc7",
+	        "subject": "job4",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test4@mail.com" }, { "mailbox": "577106cc6baa8d7d1bfe5dc8",
+	        "subject": "job5",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test5@mail.com" }, { "mailbox": "577106d46baa8d7d1bfe5dc9",
+	        "subject": "job6",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test6@mail.com" }, { "mailbox": "577106d46baa8d7d1bfe5dc9",
+	        "subject": "job7",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test6@mail.com" }, { "mailbox": "577106d46baa8d7d1bfe5dc9",
+	        "subject": "job8",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test6@mail.com" }, { "mailbox": "577106df6baa8d7d1bfe5dca",
+	        "subject": "job10",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test10@mail.com" }, { "mailbox": "577106df6baa8d7d1bfe5dca",
+	        "subject": "job11",
+	        "body": "Lorem ipsum dolor sit amet, ex perpetua convenire est, mei primis atomorum ex, aliquando urbanitas persecuti ei duo.",
+	        "to": "test11@mail.com" }],
+	    "users": [{
+	        "fullName": "Натальина Наталья",
+	        "avatarUrl": "https://randomuser.me/api/portraits/thumb/women/7.jpg",
+	        "birthdate": "1990-07-03T00:00:00.000Z",
+	        "gender": "F",
+	        "address": "ул. Лермонтова, 59",
+	        "email": "ivanov@mail.ru" }, { "fullName": "Петров Петр",
+	        "avatarUrl": "https://randomuser.me/api/portraits/thumb/men/7.jpg",
+	        "birthdate": "1957-01-14T00:00:00.000Z",
+	        "gender": "M",
+	        "address": "ул.Пушкинская, 13",
+	        "email": "ivanov@mail.ru" }, { "fullName": "Иванов Иван",
+	        "avatarUrl": "https://randomuser.me/api/portraits/thumb/men/57.jpg",
+	        "birthdate": "1976-10-10T00:00:00.000Z",
+	        "gender": "M",
+	        "address": "ул. Звенигородская, 47б",
+	        "email": "ivanov@mail.ru"
+	    }]
+	};
 
 /***/ }
 /******/ ]);

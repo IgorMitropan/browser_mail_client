@@ -1,12 +1,6 @@
 'use strict';
 import template from "./commonPage.html";
-
-const COMMON_STATE_CHILDREN = [
-    {title:'Mail', state:'mail'},
-    {title:'Contacts', state:'contacts'}
-];
-const SELECTED_COMMON_STATE_CHILD_INDEX = 0;
-const SELECTED_MAILBOX_INDEX = 0;
+import {COMMON_STATE_CHILDREN, SELECTED_COMMON_STATE_CHILD_INDEX, SELECTED_MAILBOX_INDEX} from '../defaultConsts.js';
 
 let selectedStateChild = COMMON_STATE_CHILDREN[SELECTED_COMMON_STATE_CHILD_INDEX];
 let selectedMailbox = SELECTED_MAILBOX_INDEX;
@@ -41,7 +35,7 @@ function controller (AuthService, $state, $scope) {
         $state.go('login');
     };
     this.refresh = () => {
-        selectedStateChild = this.chosenStateChild;
+        selectedStateChild = this.selectedStateChild;
         selectedMailbox = this.selectedMailbox;
         $state.reload();
     };
