@@ -1,11 +1,24 @@
 'use strict';
 import template from "./contactList.html";
 
-function controller ($filter, $scope) {
+function controller ($filter, $scope, $q, Restangular) {
     "ngInject";
     
     this.contacts = $filter('orderBy')(this.contacts, 'fullName');
     let contacts = this.contacts;
+
+    let findIndexById = (arr, id) => {
+        for (let i = 0; i<arr.length; i++) {
+            if (arr[i]._id === id) {
+                return i;
+            }
+        }
+        return null;
+    };
+
+    let search = (search) => {
+        $scope.$ctrl.contacts = $filter('filter')(contacts, search, false, 'fullName');
+    };
 
     this.numberOfSelectedItems = 0;
 
@@ -15,8 +28,25 @@ function controller ($filter, $scope) {
         $scope.$ctrl.change();
     });
 
-    $scope.$watch('$ctrl.search', (search) => {
-        $scope.$ctrl.contacts = $filter('filter')(contacts, search, false, 'fullName');
+    $scope.$watch('$ctrl.search', search);
+
+    $scope.$on('deleteSelectedItems',  () => {
+        let promisesArray = [];
+
+        let selectedItems = $scope.$ctrl.contacts.filter(item => item.selected);
+
+        selectedItems.forEach(contact => {
+                let index = findIndexById(contacts, contact._id);
+                contacts.splice(index, 1);
+
+                promisesArray.push(Restangular.one('users', contact._id).remove());
+            });
+        
+        $q.all(promisesArray).then(() => {
+            search();
+            this.change();
+        });
+
     });
 
     this.change = () => {
@@ -30,8 +60,8 @@ function controller ($filter, $scope) {
             this.selectAll = false;
             this.isAnyItemSelected = false;
         }
-
-        if (newNumberOfSelectedItems === this.contacts.length) {
+        
+        if (newNumberOfSelectedItems && newNumberOfSelectedItems === this.contacts.length) {
             this.selectAll = true;
         }
 

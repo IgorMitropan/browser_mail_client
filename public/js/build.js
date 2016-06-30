@@ -542,7 +542,7 @@
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"modal-header\">\r\n    <form class=\"form-horizontal\" name=\"emailSendForm\" role=\"form\" novalidate>\r\n\r\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : emailSendForm.email.$invalid && !emailSendForm.email.$pristine }\">\r\n            <label for=\"email\" class=\"col-sm-2 control-label\">To:</label>\r\n            <div class=\"col-sm-10\">\r\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" placeholder=\"Email address\" value=\"\" ng-model=\"$ctrl.email\">\r\n                <div ng-messages=\"emailSendForm.email.$error\">\r\n                    <div ng-message=\"email\"  class=\"alert-danger\">Enter a valid\r\n                        email.</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        -\r\n        <div class=\"form-group\">\r\n            <label for=\"name\" class=\"col-sm-2 control-label\">Subject:</label>\r\n            <div class=\"col-sm-10\">\r\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"\" value=\"\">\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\"form-group\">\r\n            <label for=\"message\" class=\"col-sm-2 control-label\">Message:</label>\r\n            <div class=\"col-sm-10\">\r\n                <textarea class=\"form-control\" rows=\"4\" name=\"message\" id=\"message\"></textarea>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <div class=\"col-sm-10 col-sm-offset-2\">\r\n                <input id=\"submit\" name=\"submit\" type=\"submit\" value=\"Send\" class=\"btn btn-primary\">\r\n                <button class=\"btn btn-warning\" ng-click=\"cancel()\">Cancel</button>\r\n            </div>\r\n        </div>\r\n    </form>";
+	module.exports = "<div class=\"modal-header\">\r\n    <form class=\"form-horizontal\" name=\"emailSendForm\" role=\"form\" novalidate>\r\n\r\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : emailSendForm.email.$invalid && !emailSendForm.email.$pristine }\">\r\n            <label for=\"email\" class=\"col-sm-2 control-label\">To:</label>\r\n            <div class=\"col-sm-10\">\r\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" placeholder=\"Email address\" value=\"\" ng-model=\"$ctrl.email\">\r\n                <div ng-messages=\"emailSendForm.email.$error\">\r\n                    <div ng-message=\"email\"  class=\"alert-danger\">Enter a valid\r\n                        email.</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label for=\"name\" class=\"col-sm-2 control-label\">Subject:</label>\r\n            <div class=\"col-sm-10\">\r\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"\" value=\"\">\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\"form-group\">\r\n            <label for=\"message\" class=\"col-sm-2 control-label\">Message:</label>\r\n            <div class=\"col-sm-10\">\r\n                <textarea class=\"form-control\" rows=\"4\" name=\"message\" id=\"message\"></textarea>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <div class=\"col-sm-10 col-sm-offset-2\">\r\n                <input id=\"submit\" name=\"submit\" type=\"submit\" value=\"Send\" class=\"btn btn-primary\">\r\n                <button class=\"btn btn-warning\" ng-click=\"cancel()\">Cancel</button>\r\n            </div>\r\n        </div>\r\n    </form>";
 
 /***/ },
 /* 11 */
@@ -635,7 +635,6 @@
 	        var newNumberOfSelectedItems = _this.letters.filter(function (item) {
 	            return item.selected;
 	        }).length;
-	        console.log(newNumberOfSelectedItems);
 
 	        if (newNumberOfSelectedItems && !_this.numberOfSelectedItems) {
 	            _this.isAnyItemSelected = true;
@@ -644,10 +643,9 @@
 	        if (!newNumberOfSelectedItems && _this.numberOfSelectedItems) {
 	            _this.selectAll = false;
 	            _this.isAnyItemSelected = false;
-	            console.log('selectall', _this.selectAll);
 	        }
 
-	        if (newNumberOfSelectedItems === _this.letters.length) {
+	        if (newNumberOfSelectedItems && newNumberOfSelectedItems === _this.letters.length) {
 	            _this.selectAll = true;
 	        }
 
@@ -680,7 +678,7 @@
 
 	'use strict';
 
-	controller.$inject = ["$filter", "$scope"];
+	controller.$inject = ["$filter", "$scope", "$q", "Restangular"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -691,13 +689,26 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function controller($filter, $scope) {
+	function controller($filter, $scope, $q, Restangular) {
 	    "ngInject";
 
 	    var _this = this;
 
 	    this.contacts = $filter('orderBy')(this.contacts, 'fullName');
 	    var contacts = this.contacts;
+
+	    var findIndexById = function findIndexById(arr, id) {
+	        for (var i = 0; i < arr.length; i++) {
+	            if (arr[i]._id === id) {
+	                return i;
+	            }
+	        }
+	        return null;
+	    };
+
+	    var search = function search(_search) {
+	        $scope.$ctrl.contacts = $filter('filter')(contacts, _search, false, 'fullName');
+	    };
 
 	    this.numberOfSelectedItems = 0;
 
@@ -709,8 +720,26 @@
 	        $scope.$ctrl.change();
 	    });
 
-	    $scope.$watch('$ctrl.search', function (search) {
-	        $scope.$ctrl.contacts = $filter('filter')(contacts, search, false, 'fullName');
+	    $scope.$watch('$ctrl.search', search);
+
+	    $scope.$on('deleteSelectedItems', function () {
+	        var promisesArray = [];
+
+	        var selectedItems = $scope.$ctrl.contacts.filter(function (item) {
+	            return item.selected;
+	        });
+
+	        selectedItems.forEach(function (contact) {
+	            var index = findIndexById(contacts, contact._id);
+	            contacts.splice(index, 1);
+
+	            promisesArray.push(Restangular.one('users', contact._id).remove());
+	        });
+
+	        $q.all(promisesArray).then(function () {
+	            search();
+	            _this.change();
+	        });
 	    });
 
 	    this.change = function () {
@@ -727,7 +756,7 @@
 	            _this.isAnyItemSelected = false;
 	        }
 
-	        if (newNumberOfSelectedItems === _this.contacts.length) {
+	        if (newNumberOfSelectedItems && newNumberOfSelectedItems === _this.contacts.length) {
 	            _this.selectAll = true;
 	        }
 
@@ -1040,23 +1069,22 @@
 	        value: function restoreDB() {
 	            var _this = this;
 
-	            /*this._$http.delete(this._BASE_URL + '/users')
-	                .then(() => this._$http.post(this._BASE_URL+'/users', JSON.stringify(this.DB.users)));
-	            
-	            this._$http.delete(this._BASE_URL + '/letters')
-	                .then(() => this._$http.post(this._BASE_URL+'/letters', JSON.stringify(this.DB.letters)));*/
-
 	            this._Restangular.all('users').getList().then(function (users) {
-	                users.remove();
+	                var promise = users.remove();
+
 	                _this.DB.users.forEach(function (user) {
-	                    users.post(user);
+	                    promise.then(function () {
+	                        return users.post(user);
+	                    });
 	                });
 	            });
 
 	            this._Restangular.all('letters').getList().then(function (letters) {
-	                letters.remove();
+	                var promise = letters.remove();
 	                _this.DB.letters.forEach(function (letter) {
-	                    letters.post(letter);
+	                    promise.then(function () {
+	                        return letters.post(letter);
+	                    });
 	                });
 	            });
 	        }

@@ -68,7 +68,6 @@ function controller($filter, $scope, $state, $q, Restangular) {
     
     this.change = () => {
         let newNumberOfSelectedItems = this.letters.filter(item => {return item.selected}).length;
-        console.log(newNumberOfSelectedItems);
 
         if (newNumberOfSelectedItems && !this.numberOfSelectedItems) {
             this.isAnyItemSelected = true;
@@ -77,13 +76,12 @@ function controller($filter, $scope, $state, $q, Restangular) {
         if (!newNumberOfSelectedItems && this.numberOfSelectedItems) {
             this.selectAll = false;
             this.isAnyItemSelected = false;
-            console.log('selectall', this.selectAll);
         }
 
-        if (newNumberOfSelectedItems === this.letters.length) {
+        if (newNumberOfSelectedItems && newNumberOfSelectedItems === this.letters.length) {
             this.selectAll = true;
         }
-
+        
         this.numberOfSelectedItems = newNumberOfSelectedItems;
     };
 

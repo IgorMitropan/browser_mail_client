@@ -19,23 +19,19 @@ export default class RestoreDBService {
     }
     
     restoreDB() {
-        /*this._$http.delete(this._BASE_URL + '/users')
-            .then(() => this._$http.post(this._BASE_URL+'/users', JSON.stringify(this.DB.users)));
-        
-        this._$http.delete(this._BASE_URL + '/letters')
-            .then(() => this._$http.post(this._BASE_URL+'/letters', JSON.stringify(this.DB.letters)));*/
 
         this._Restangular.all('users').getList().then(users => {
-            users.remove();
+            let promise = users.remove();
+            
             this.DB.users.forEach(user => {
-                users.post(user);
+                promise.then(() => users.post(user));
             });
         });
 
          this._Restangular.all('letters').getList().then(letters => {
-             letters.remove();
+             let promise = letters.remove();
              this.DB.letters.forEach(letter => {
-                 letters.post(letter);
+                 promise.then(() => letters.post(letter));
              });
              
          })
