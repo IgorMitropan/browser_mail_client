@@ -14,6 +14,8 @@ export const USER_PROFILE = {
     password: ''
 };
 
+export const BASE_URL = 'https://test-api.javascript.ru/v1/imytropan';
+
 export const DB = {
     "letters": [{
         "mailbox": "577106a66baa8d7d1bfe5dc6",

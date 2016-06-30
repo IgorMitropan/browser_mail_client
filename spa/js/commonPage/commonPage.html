@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <header class="row">
-        <div class="logo col-sm-5">
+        <div class="logo col-sm-4">
             <ul class="profile-icons list-inline pull-left">
                 <li>
                     <img ng-src={{$ctrl.photoUrl}} class="img-circle">
@@ -18,9 +18,9 @@
 
         </div><!-- search-bar -->
 
-        <div class="profile col-sm-2">
-            <button class="btn btn-control" title="Restore test DB" ng-click="$ctrl.restoreTestDB()">
-                <span class="glyphicon glyphicon-repeat"></span>
+        <div class="profile col-sm-3">
+            <button class="btn btn-info" title="Restore test DB" ng-click="$ctrl.restoreTestDB()">
+                <span class="glyphicon glyphicon-cloud-upload"></span>
             </button>
 
             <a class="logout pull-right" ng-click="$ctrl.signOut()">Sign out <span class="glyphicon glyphicon-log-out"></span></a>

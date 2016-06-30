@@ -53,6 +53,8 @@
 
 	'use strict';
 
+	var _defaultConsts = __webpack_require__(7);
+
 	var _router = __webpack_require__(2);
 
 	var _router2 = _interopRequireDefault(_router);
@@ -111,7 +113,7 @@
 
 	app.config(_router2.default);
 	app.config(["RestangularProvider", function (RestangularProvider) {
-	    RestangularProvider.setBaseUrl('https://test-api.javascript.ru/v1/imytropan');
+	    RestangularProvider.setBaseUrl(_defaultConsts.BASE_URL);
 	}]);
 
 	app.run(["$rootScope", "$transitions", function ($rootScope, $transitions) {
@@ -373,7 +375,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-5\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"form-group has-feedback\">\r\n                    <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                           ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n                    <span class=\"glyphicon glyphicon-search form-control-feedback\" aria-hidden=\"true\"></span>\r\n            </div><!-- /form-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-2\">\r\n            <button class=\"btn btn-control\" title=\"Restore test DB\" ng-click=\"$ctrl.restoreTestDB()\">\r\n                <span class=\"glyphicon glyphicon-repeat\"></span>\r\n            </button>\r\n\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.stateChildren\" choice=\"$ctrl.selectedStateChild\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\" ng-click=\"$ctrl.refresh()\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\" ng-if=\"$ctrl.isListShown\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\" ng-change=\"$ctrl.setSelection()\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
+	module.exports = "<div class=\"container-fluid\">\r\n    <header class=\"row\">\r\n        <div class=\"logo col-sm-4\">\r\n            <ul class=\"profile-icons list-inline pull-left\">\r\n                <li>\r\n                    <img ng-src={{$ctrl.photoUrl}} class=\"img-circle\">\r\n                </li>\r\n                <li>{{$ctrl.userName}}</li>\r\n            </ul>\r\n        </div><!-- profile -->\r\n\r\n        <div class=\"search-bar col-sm-5\">\r\n            <div class=\"form-group has-feedback\">\r\n                    <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\"\r\n                           ng-model=\"$ctrl.search\" ng-model-options=\"{ debounce: 500 }\">\r\n                    <span class=\"glyphicon glyphicon-search form-control-feedback\" aria-hidden=\"true\"></span>\r\n            </div><!-- /form-group -->\r\n\r\n        </div><!-- search-bar -->\r\n\r\n        <div class=\"profile col-sm-3\">\r\n            <button class=\"btn btn-info\" title=\"Restore test DB\" ng-click=\"$ctrl.restoreTestDB()\">\r\n                <span class=\"glyphicon glyphicon-cloud-upload\"></span>\r\n            </button>\r\n\r\n            <a class=\"logout pull-right\" ng-click=\"$ctrl.signOut()\">Sign out <span class=\"glyphicon glyphicon-log-out\"></span></a>\r\n\r\n        </div><!-- logout -->\r\n    </header>\r\n\r\n    <div class=\"control-bar row\">\r\n        <div class=\"col-sm-2\">\r\n            <drop-down items=\"$ctrl.stateChildren\" choice=\"$ctrl.selectedStateChild\"></drop-down>\r\n        </div><!-- menu -->\r\n\r\n        <div class=\"controls col-sm-10\">\r\n            <ul class=\"control-list list-inline\">\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Refresh\" ng-click=\"$ctrl.refresh()\">\r\n                        <span class=\"glyphicon glyphicon-repeat\"></span>\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Select All\" ng-if=\"$ctrl.isListShown\">\r\n                        <input type=\"checkbox\" class=\"mail-select\" ng-model=\"$ctrl.selectAll\" ng-change=\"$ctrl.setSelection()\">\r\n                    </button>\r\n                </li>\r\n                <li>\r\n                    <button class=\"btn btn-control\" title=\"Delete\" ng-if=\"$ctrl.isAnyItemSelected\">\r\n                        <span class=\"glyphicon glyphicon-trash\"></span>\r\n                    </button>\r\n                </li>\r\n\r\n            </ul>\r\n        </div><!-- controls -->\r\n    </div><!-- control-bar -->\r\n</div>\r\n\r\n<div class=\"mail row\">\r\n    <div ui-view>Loading...</div>\r\n</div>\r\n\r\n";
 
 /***/ },
 /* 7 */
@@ -394,6 +396,8 @@
 	    login: '',
 	    password: ''
 	};
+
+	var BASE_URL = exports.BASE_URL = 'https://test-api.javascript.ru/v1/imytropan';
 
 	var DB = exports.DB = {
 	    "letters": [{
@@ -943,21 +947,33 @@
 
 	        this._DB = _defaultConsts.DB;
 	        this._Restangular = Restangular;
+
+	        this.restoreDB = this.restoreDB.bind(this);
 	    }
 
 	    _createClass(RestoreDBService, [{
 	        key: 'restoreDB',
 	        value: function restoreDB() {
-	            var DB = this.DB;
+	            var _this = this;
 
-	            this._Restangular.all('users').then(function (users) {
+	            /*this._$http.delete(this._BASE_URL + '/users')
+	                .then(() => this._$http.post(this._BASE_URL+'/users', JSON.stringify(this.DB.users)));
+	            
+	            this._$http.delete(this._BASE_URL + '/letters')
+	                .then(() => this._$http.post(this._BASE_URL+'/letters', JSON.stringify(this.DB.letters)));*/
+
+	            this._Restangular.all('users').getList().then(function (users) {
 	                users.remove();
-	                users.post(DB.users);
+	                _this.DB.users.forEach(function (user) {
+	                    users.post(user);
+	                });
 	            });
 
-	            this._Restangular.all('letters').then(function (users) {
-	                users.remove();
-	                users.post(DB.letters);
+	            this._Restangular.all('letters').getList().then(function (letters) {
+	                letters.remove();
+	                _this.DB.letters.forEach(function (letter) {
+	                    letters.post(letter);
+	                });
 	            });
 	        }
 	    }, {

@@ -1,5 +1,6 @@
 'use strict';
 
+import {BASE_URL} from './defaultConsts.js';
 
 import router from './router.js';
 
@@ -22,7 +23,7 @@ const app = angular.module('mailApp', ['ui.router', 'restangular', 'ui.bootstrap
 
 app.config(router);
 app.config(function(RestangularProvider) {
-    RestangularProvider.setBaseUrl('https://test-api.javascript.ru/v1/imytropan');
+    RestangularProvider.setBaseUrl(BASE_URL);
 });
 
 app.run(function($rootScope, $transitions) {
