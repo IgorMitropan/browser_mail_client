@@ -4,8 +4,13 @@ import modalTemplate from './modalCompose.html';
 import {TRASH_MAILBOX_INDEX} from '../defaultConsts';
 
 
-function controller($scope, $uibModal) {
+function controller($scope, $uibModal, Restangular) {
     "ngInject";
+    
+    this.to = '';
+    this.subject = '';
+    this.body = '';
+    
 
     this.mailboxId = this.mailboxes[this.selectedMailbox]._id;
 
@@ -23,12 +28,29 @@ function controller($scope, $uibModal) {
 
     this.modalController = function ($scope, $uibModalInstance) {
 
-        // $scope.ok = function () {
-        //     $uibModalInstance.close(----data from form-----);
-        // };
+        $scope.sendTo = '';
+        $scope.subject = '';
+        $scope.body = '';
+
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
+        };
+        
+        $scope.sendLetter = () => {
+            let  letter = {"mailbox": "577106c16baa8d7d1bfe5dc7",
+                "subject": $scope.subject,
+                "body": $scope.body,
+                "to": $scope.sendTo
+            };
+            
+            Restangular.all('letters').post(letter).then(() => {
+                $scope.sendTo = '';
+                $scope.subject = '';
+                $scope.body = '';
+                $uibModalInstance.close();
+            });
+            console.log($scope);
         };
     };
 
