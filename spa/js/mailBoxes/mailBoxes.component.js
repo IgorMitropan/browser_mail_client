@@ -1,6 +1,8 @@
 import template from './mailBoxes.html';
+import modalTemplate from './modalCompose.html';
 
-function controller($scope) {
+
+function controller($scope, $uibModal) {
     "ngInject";
 
     this.mailboxId = this.mailboxes[this.selectedMailbox]._id;
@@ -13,6 +15,24 @@ function controller($scope) {
                 this.selectedMailbox = i;
             }
         }
+    };
+
+    this.modalController = function ($scope, $uibModalInstance) {
+
+        // $scope.ok = function () {
+        //     $uibModalInstance.close(----data from form-----);
+        // };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    };
+
+    this.openModal = () => {
+        $uibModal.open({
+            template: modalTemplate,
+            controller: this.modalController
+        });
     };
 }
 

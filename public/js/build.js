@@ -458,7 +458,7 @@
 
 	'use strict';
 
-	controller.$inject = ["$scope"];
+	controller.$inject = ["$scope", "$uibModal"];
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -467,9 +467,13 @@
 
 	var _mailBoxes2 = _interopRequireDefault(_mailBoxes);
 
+	var _modalCompose = __webpack_require__(26);
+
+	var _modalCompose2 = _interopRequireDefault(_modalCompose);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function controller($scope) {
+	function controller($scope, $uibModal) {
 	    "ngInject";
 
 	    var _this = this;
@@ -484,6 +488,24 @@
 	                _this.selectedMailbox = i;
 	            }
 	        }
+	    };
+
+	    this.modalController = function ($scope, $uibModalInstance) {
+
+	        // $scope.ok = function () {
+	        //     $uibModalInstance.close(----data from form-----);
+	        // };
+
+	        $scope.cancel = function () {
+	            $uibModalInstance.dismiss('cancel');
+	        };
+	    };
+
+	    this.openModal = function () {
+	        $uibModal.open({
+	            template: _modalCompose2.default,
+	            controller: _this.modalController
+	        });
 	    };
 	}
 
@@ -503,7 +525,7 @@
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"sidebar col-sm-2\">\r\n    <button class=\"compose btn btn-danger\">\r\n        Compose\r\n    </button>\r\n\r\n    <ul class=\"inbox-sections list-unstyled\">\r\n        <li class=\"pending\" ng-repeat=\"mailbox in $ctrl.mailboxes\"\r\n            ng-class=\"{'active': mailbox._id === $ctrl.mailboxId}\" ng-click=\"$ctrl.choseMailbox(mailbox)\">\r\n            {{mailbox.title}}\r\n        </li>\r\n    </ul>\r\n</div><!-- sidebar -->\r\n\r\n<div ui-view></div>";
+	module.exports = "<div class=\"sidebar col-sm-2\">\r\n    <button class=\"compose btn btn-danger\" ng-click=\"$ctrl.openModal()\">\r\n        Compose\r\n    </button>\r\n\r\n    <ul class=\"inbox-sections list-unstyled\">\r\n        <li class=\"pending\" ng-repeat=\"mailbox in $ctrl.mailboxes\"\r\n            ng-class=\"{'active': mailbox._id === $ctrl.mailboxId}\" ng-click=\"$ctrl.choseMailbox(mailbox)\">\r\n            {{mailbox.title}}\r\n        </li>\r\n    </ul>\r\n</div><!-- sidebar -->\r\n\r\n<div ui-view></div>";
 
 /***/ },
 /* 10 */
@@ -987,6 +1009,12 @@
 	}();
 
 	exports.default = RestoreDBService;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"modal-header\">\r\n    <form class=\"form-horizontal\" name=\"emailSendForm\" role=\"form\" novalidate>\r\n\r\n        <div class=\"form-group\" ng-class=\"{ 'has-error' : emailSendForm.email.$invalid && !emailSendForm.email.$pristine }\">\r\n            <label for=\"email\" class=\"col-sm-2 control-label\">To:</label>\r\n            <div class=\"col-sm-10\">\r\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" placeholder=\"Email address\" value=\"\" ng-model=\"$ctrl.email\">\r\n                <div ng-messages=\"emailSendForm.email.$error\">\r\n                    <div ng-message=\"email\"  class=\"alert-danger\">Enter a valid\r\n                        email.</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        -\r\n        <div class=\"form-group\">\r\n            <label for=\"name\" class=\"col-sm-2 control-label\">Subject:</label>\r\n            <div class=\"col-sm-10\">\r\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"\" value=\"\">\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\"form-group\">\r\n            <label for=\"message\" class=\"col-sm-2 control-label\">Message:</label>\r\n            <div class=\"col-sm-10\">\r\n                <textarea class=\"form-control\" rows=\"4\" name=\"message\" id=\"message\"></textarea>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <div class=\"col-sm-10 col-sm-offset-2\">\r\n                <input id=\"submit\" name=\"submit\" type=\"submit\" value=\"Send\" class=\"btn btn-primary\">\r\n                <button class=\"btn btn-warning\" ng-click=\"cancel()\">Cancel</button>\r\n            </div>\r\n        </div>\r\n    </form>";
 
 /***/ }
 /******/ ]);
