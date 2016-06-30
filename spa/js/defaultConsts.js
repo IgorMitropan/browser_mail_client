@@ -16,6 +16,8 @@ export const USER_PROFILE = {
 
 export const BASE_URL = 'https://test-api.javascript.ru/v1/imytropan';
 
+export const TRASH_MAILBOX_INDEX = 3;
+
 export const DB = {
     "letters": [{
         "mailbox": "577106a66baa8d7d1bfe5dc6",

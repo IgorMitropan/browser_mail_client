@@ -28,19 +28,25 @@ function controller ($scope, $state, AuthService, RestoreDBService) {
         $scope.$ctrl.search = '';
         $scope.$ctrl.selectAll = false;
     });
+
+    this.restoreTestDB = RestoreDBService.restoreDB;
     
     this.signOut = () => {
         selectedMailbox = SELECTED_MAILBOX_INDEX;
         AuthService.signOut();
         $state.go('login');
     };
+    
     this.refresh = () => {
         selectedStateChild = this.selectedStateChild;
         selectedMailbox = this.selectedMailbox;
         $state.reload();
     };
+    
+    this.delete = () => {
+        $scope.$broadcast('deleteSelectedItems');
+    }
 
-    this.restoreTestDB = RestoreDBService.restoreDB;
 }
 
 export default {

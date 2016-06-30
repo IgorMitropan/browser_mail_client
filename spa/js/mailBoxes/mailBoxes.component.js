@@ -1,6 +1,8 @@
 import template from './mailBoxes.html';
 import modalTemplate from './modalCompose.html';
 
+import {TRASH_MAILBOX_INDEX} from '../defaultConsts';
+
 
 function controller($scope, $uibModal) {
     "ngInject";
@@ -16,6 +18,8 @@ function controller($scope, $uibModal) {
             }
         }
     };
+    
+    this.trashBoxId = this.mailboxes[3]._id;
 
     this.modalController = function ($scope, $uibModalInstance) {
 

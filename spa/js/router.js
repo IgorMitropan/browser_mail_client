@@ -67,6 +67,7 @@ export default function ($urlRouterProvider, $transitionsProvider, $stateProvide
             template: `<letters-list 
                         letters="letters" 
                         mailbox-id="$parent.$ctrl.mailboxId"
+                        trash-box-id="$parent.$ctrl.trashBoxId"
                         select-all="$parent.$ctrl.selectAll"
                         is-any-item-selected="$parent.$ctrl.isAnyItemSelected"
                         search="$parent.$ctrl.search">
