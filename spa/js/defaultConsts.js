@@ -10,8 +10,8 @@ export const SELECTED_MAILBOX_INDEX = 0;
 export const USER_PROFILE = {
     userName: 'John Smith',
     photo: 'img/profile.jpg',
-    login: '',
-    password: ''
+    login: 'john@test.com',
+    password: 'test'
 };
 
 export const BASE_URL = 'https://test-api.javascript.ru/v1/imytropan';

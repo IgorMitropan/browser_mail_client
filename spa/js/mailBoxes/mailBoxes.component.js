@@ -27,6 +27,7 @@ function controller($scope, $uibModal, Restangular) {
     this.trashBoxId = this.mailboxes[3]._id;
 
     this.modalController = function ($scope, $uibModalInstance) {
+        "ngInject";
 
         $scope.sendTo = '';
         $scope.subject = '';
@@ -50,7 +51,6 @@ function controller($scope, $uibModal, Restangular) {
                 $scope.body = '';
                 $uibModalInstance.close();
             });
-            console.log($scope);
         };
     };
 

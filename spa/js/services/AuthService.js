@@ -9,7 +9,8 @@ export default class AuthService {
         this._authUser = {
             userName: '',
             photo: ''
-        }
+        };
+        this._USER_PROFILE = USER_PROFILE;
     }
 
     get checkAuth() {
@@ -21,11 +22,11 @@ export default class AuthService {
     }
 
     signIn (login, password) {
-        this._isAuthorized = (login === USER_PROFILE.login && password === USER_PROFILE.password);
+        this._isAuthorized = (login === this._USER_PROFILE.login && password === this._USER_PROFILE.password);
         
         this._authUser = {
-            userName: USER_PROFILE.userName,
-            photo: USER_PROFILE.photo
+            userName: this._USER_PROFILE.userName,
+            photo: this._USER_PROFILE.photo
         }
     }
 
