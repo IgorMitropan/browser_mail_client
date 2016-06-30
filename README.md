@@ -1,7 +1,7 @@
 # Browser mail client - simple Angular SPA
 
 ###Homepage: http://igormitropan.github.io/browser_mail_client/public/
-###Test credentials: e-mail: john@test, password: test
+###Test credentials: e-mail: john@test.com, password: test
 
 Used technologies and features:
 * AngularJS 1.5.7
